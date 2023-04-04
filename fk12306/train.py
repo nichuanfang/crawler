@@ -16,7 +16,7 @@ import prettytable as pt
 from .glovar import Glovar
 from .request import Request
 from .utils import code_to_station, station_to_code, colorize
-
+import json
 
 class Train:
     """
@@ -160,6 +160,8 @@ class TrainTable:
 
     def __init__(self):
         self.trains_list = []
+    
+
 
     def echo(self):
         """
@@ -171,6 +173,17 @@ class TrainTable:
         for train in self.trains_list:
             tb.add_row(train.row)
         print(tb)
+
+    def output(self):
+        """
+        对外调用的方法，用来返回查询结果
+        """
+        tb = pt.PrettyTable()
+        tb.field_names = ["车次", "发车", "出发站", "到达站", "到达", "余票", "历时"]
+        self.cleanup()
+        for train in self.trains_list:
+            tb.add_row(train.row)
+        return tb.get_html_string()
 
     def cleanup(self):
         """ 处理trains_list，排序和删除无效数据 """
@@ -269,7 +282,7 @@ class TrainTable:
                 train_list.append(train)
         except Exception as e:
             print(e)
-            print(r.text)
+            # print(r.text)
             print(s.headers)
             train_list = []
         return train_list

@@ -1,10 +1,11 @@
+from re import I
 from flask import Flask, request, jsonify
 
 import json
 
 
-from fk12306.glovar import Glovar
 from fk12306.train import TrainTable
+from fk12306.config import Options
 
 
 import datetime
@@ -16,6 +17,11 @@ app.debug = True
 
 @app.route(rule='/get', methods=['get'])
 def get_http():
+    """测试get调用
+
+    Returns:
+        _type_: url
+    """    
     return request.base_url
 
 
@@ -34,8 +40,76 @@ def post_http():
     print(params)
     return jsonify(params)
 
+@app.route(rule='/ticket', methods=['get'])
+def ticket():
+    """查询余票
 
-def query_tickets(begin: str, end: str, **kwargs):
+    Returns:
+        _type_: 余票信息
+    """    
+    values = request.values
+    if not request.values.__contains__('begin'):
+        return 'begin参数必填!'
+    else:
+        begin = request.values['begin'].replace('\'','').replace('\"','')
+    if not request.values.__contains__('end'):
+        return 'end参数必填!'
+    else:
+        end = request.values['end'].replace('\'','').replace('\"','')
+    if request.values.__contains__('offset'):
+        try:
+            # comment: 
+            offset = int(request.values['offset'])
+            pass
+        except Exception as e:
+            offset = 0
+    else:
+        offset = 0
+    if request.values.__contains__('seats'):
+        seats = request.values['seats']
+    else:
+        seats = None
+    if request.values.__contains__('train_no'):
+        train_no = request.values['train_no']
+    else:
+        train_no = None
+    zmode = handle_bool(request,'zmode')
+    zzmode = handle_bool(request,'zzmode')
+    gcd = handle_bool(request,'gcd')
+    ktz = handle_bool(request,'ktz')
+    remaining = handle_bool(request,'remaining')
+    # 根据查询参数调用对应的接口
+    return query_tickets(begin,end,offset,seats,train_no,zmode,zzmode,gcd,ktz,remaining)
+
+
+
+
+
+def handle_bool(request,var:str):
+    """处理请求bool默认值
+
+    Args:
+        request (_type_): 请求
+        var (str): 字段
+
+    Returns:
+        _type_: 处理后的bool值
+    """    
+    res = False
+    if request.values.__contains__(var):
+        if request.values[var].lower() == 'true':
+            res = True
+        else:
+            try:
+                res = bool(int(request.values[var]))
+            except Exception as e:
+                return res
+    return res
+
+
+
+def query_tickets(begin: str, end: str, offset:int, seats:str|None, train_no:str|None
+                  ,zmode:bool,zzmode:bool,gcd:bool,ktz:bool,remaining:bool):
     """查询余票(默认当天 普通模式 有票 高铁动车)
     
     Args:
@@ -45,71 +119,47 @@ def query_tickets(begin: str, end: str, **kwargs):
 
         offset (int):偏移量 距离今天的偏移量 默认为0 例如  1: 明天 -1:昨天
 
-        mode (int):模式 0:普通模式(默认) 1:(高级模式) 2:(终极模式)
-
-        type (int):车次类型 0:不过滤类型(默认) 1: 只看高铁动车城际  2: 只看普快特快直达等
-
-        seats (int):座位类型 0:不过滤类型(默认) 1: 一等座  2: 二等座 3: 无座
+        seats (str):座位类型  一等座   二等座   无座
 
         train_no(str):默认不限制 限制车次
+
+        zmode (bool):模式 是否开启高级模式 默认False
+
+        zzmode(bool):模式 是否开启终极模式 默认False
+
+        gcd(bool): 只看高铁
+
+        ktz(bool): 只看火车
+
+        remaining(bool): 只看有票
     """
-    data = {}
-    data['fs'] = begin
-    data['ts'] = end
-    data['date'] = (datetime.datetime.now() +
+    opts = Options()
+    opts.fs = begin
+    opts.ts = end
+    if offset:
+        opts.date = (datetime.datetime.now() +
                     datetime.timedelta(days=offset)).strftime('%Y-%m-%d')
-    if kwargs['seats']:
-        match kwargs['seats']:
-            case 1:
-                data['seats'] = '一等座'
-            case 2:
-                data['seats'] = '二等座'
-            case 3:
-                data['seats'] = '无座'
-            case other:
-                pass
-    if kwargs['train_no']:
-        data['train_no'] = kwargs['train_no']
-    if kwargs['mode']:
-        match kwargs['mode']:
-            case 1:
-                data['zmode'] = True
-                data['zzmode'] = False
-            case 2:
-                data['zmode'] = False
-                data['zzmode'] = True
-            case other:
-                data['zmode'] = False
-                data['zzmode'] = False
-        pass
-    if kwargs['type']:
-        match kwargs['type']:
-            case 1:
-                data['gcd'] = True
-                data['ktz'] = False
-            case 2:
-                data['gcd'] = False
-                data['ktz'] = True
-            case other:
-                data['gcd'] = False
-                data['ktz'] = False
-    data['remaining'] = True
-    # todo 加载代理文件和cdn
+    if seats:
+        opts.seats = seats
+    if train_no:
+        opts.train_no = train_no
+    opts.zmode = zmode
+    opts.zzmode = zzmode
+    opts.gcd = gcd
+    opts.ktz = ktz
+    opts.remaining = remaining
     # if proxies_file:
     #     opts.proxies_file = proxies_file
     # if stations_file:
     #     opts.stations_file = stations_file
     # if cdn_file:
     #     opts.cdn_file = cdn_file
-
     tt = TrainTable()
-    tt.update_trains(data)  # type: ignore
-    tt.echo()
+    tt.update_trains()   # type: ignore
+    return tt.output()
 
 
 if __name__ == '__main__':
     # 开启http服务
     # query_tickets('杭州','武汉')
-    # app.run('127.0.0.1', port=5000)
-    query_tickets('杭州','五哈尼')
-    pass
+    app.run('127.0.0.1', port=5000)

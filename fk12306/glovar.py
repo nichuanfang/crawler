@@ -9,6 +9,8 @@
 import sys
 import datetime
 from os import path
+from fake_useragent import UserAgent
+import random
 
 from .config import Options
 
@@ -24,7 +26,7 @@ FAKE_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) "
     "Chrome/72.0.3626.96 Safari/537.36",
     "X-Requested-With": "XMLHttpRequest",
-    "Cookie": "JSESSIONID=A7661242E5E9C8A99547C9B1E91638B1; tk=oFFSgEgUZSPbUh93WcEfr0bVBLrYcUaskqfZgP9qkmInxr1r0; BIGipServerotn=3956736266.64545.0000; RAIL_EXPIRATION=1680605324973; RAIL_DEVICEID=GrrhC3y2KRnlxFq6O3jDVtdCGiusKNMQlIb0CdVy8zzzZmkI5CzItSEHEVw91ad9AQnRKhn3SpGlEqS2cobU43yb_dHtRikWMch26OYPO8dspMM2gDm1fxcnh4QWwOTwP2kTZw9SBnKXh-GXoaAaQlmSchtrCCeM; BIGipServerpassport=904397066.50215.0000; guidesStatus=off; highContrastMode=defaltMode; cursorStatus=off; route=c5c62a339e7744272a54643b3be5bf64; uKey=09cf71a13b132a028c0fb799f5559d313187933470fb34a552b1c0384986560a; fo=fqyk62u36in5mbqdesvcutp_HT_XQ1MVhkH3xLnDawOzuyZRBop_0y2EH7C7Uy72YWWNu0k8EPiC9lq5sqOgl4pZ8AYNN55LUsszF-MfQ2UzjPjhlPWaB9ibqSSEdsygJfMwMIRy0wgjt6UDnCHYgk74g8FDbf9j__C_IGH60OujBMJZCPjuzbCzbeE",
+    "Cookie": "JSESSIONID=806459121FBEEB715068BFA8B2BF9188; tk=TfHY4SqBDKxI6GdcdR3UaUxl9LwqvnsFrGuhznvcLAYnxr1r0; BIGipServerotn=3738632458.64545.0000; guidesStatus=off; highContrastMode=defaltMode; cursorStatus=off; BIGipServerpassport=837288202.50215.0000; RAIL_EXPIRATION=1680907851121; RAIL_DEVICEID=XvCkXzcmjtuvmF8vcJTfLYlg3tQrQ55SzoQlMwodBbsF29Mjddt9DcGvq7OaiD72zMutxhrmj38b-Y9RiWcc51qwqCWMKyf3M_Znkf1oL8gLNM7qXNOUePyQ8rlP3TGLnASQog_Ebe0yBR3BQmbG4JabR7hSx_yf; route=6f50b51faa11b987e576cdb301e545c4; uKey=09cf71a13b132a028c0fb799f5559d31706aa2797b1db4db2b40eb52412ae114; fo=q05lmopjl8fmylsux9byxSjTLENgKV-4ipMdDQp-SLTAGxXwYZobroRBHD1KFioLJQ_m4i4bzDX8j0BJpGXLBz2wIJmVGXHI1TQ9GnwO2zwfYM57P1y_9x63JedWiTCtmMTS_2oq6gQjHLy80XK-HTRvB73qiPBt2lLMIwltjGVZvDTBfHWhHckWUW4",
 }
 
 SEAT_TYPES = {
@@ -42,6 +44,11 @@ SEAT_TYPES = {
     "其他": 22,
 }
 
+def generate_header():
+    chrome_ua:list = UserAgent().data_browsers['chrome']
+    ua = random.choice(chrome_ua)
+    FAKE_HEADERS['User-Agent'] = ua
+    return FAKE_HEADERS
 
 class Singleton(type):
     _instances = {}

@@ -9,7 +9,7 @@
 import random
 import requests
 
-from .glovar import Glovar, FAKE_HEADERS
+from .glovar import Glovar,generate_header
 
 
 class Request:
@@ -29,26 +29,26 @@ class Request:
 
         proxy = random.choices(glovar.total_proxies)
         s = requests.Session()
-        s.headers.update(FAKE_HEADERS)
+        s.headers.update(generate_header())
         s.proxies.update({"http": proxy, "https": proxy})
 
         try:
             r = s.get("https://kyfw.12306.cn/otn/leftTicket/init", timeout=5)
-            if r.status_code != requests.codes.ok or len(r.content) < 100:
+            if r.status_code != requests.codes.ok or len(r.content) < 100: # type: ignore
                 # 状态码不成功或内容长度太短也判定为失败
                 raise RuntimeError
             else:
-                return proxy
+                return proxy # type: ignore
         except Exception:
             # 如果请求失败则从代理列表中删除
-            glovar.total_proxies.remove(proxy)
+            glovar.total_proxies.remove(proxy) # type: ignore
             # 递归请求
             return self.get_available_proxy()
 
     def get_session(self):
         """ 获得一个session对象 """
         s = requests.Session()
-        s.headers.update(FAKE_HEADERS)
+        s.headers.update(generate_header())
         proxy = self.get_available_proxy()
         if proxy:
             s.proxies.update({"http": proxy, "https": proxy})
