@@ -7,7 +7,6 @@ from selenium.webdriver.common.by import By
 import random
 import re
 
-from bs4 import BeautifulSoup
 from selenium import webdriver
 import io
 import sys

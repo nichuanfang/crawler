@@ -8,7 +8,6 @@ from fk12306.train import TrainTable
 from fk12306.glovar import Glovar
 from fk12306.glovar import SEAT_TYPES
 from fk12306 import utils
-from fk12306 import fk_selenium
 
 
 import datetime
