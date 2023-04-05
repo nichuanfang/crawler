@@ -9,8 +9,10 @@
 import sys
 import datetime
 from os import path
+import time
 from fake_useragent import UserAgent
 import random
+from fk12306 import fk_selenium
 
 from .config import Options
 
@@ -25,8 +27,7 @@ FAKE_HEADERS = {
     "Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) "
     "Chrome/72.0.3626.96 Safari/537.36",
-    "X-Requested-With": "XMLHttpRequest",
-    "Cookie": "JSESSIONID=806459121FBEEB715068BFA8B2BF9188; tk=TfHY4SqBDKxI6GdcdR3UaUxl9LwqvnsFrGuhznvcLAYnxr1r0; BIGipServerotn=3738632458.64545.0000; guidesStatus=off; highContrastMode=defaltMode; cursorStatus=off; BIGipServerpassport=837288202.50215.0000; RAIL_EXPIRATION=1680907851121; RAIL_DEVICEID=XvCkXzcmjtuvmF8vcJTfLYlg3tQrQ55SzoQlMwodBbsF29Mjddt9DcGvq7OaiD72zMutxhrmj38b-Y9RiWcc51qwqCWMKyf3M_Znkf1oL8gLNM7qXNOUePyQ8rlP3TGLnASQog_Ebe0yBR3BQmbG4JabR7hSx_yf; route=6f50b51faa11b987e576cdb301e545c4; uKey=09cf71a13b132a028c0fb799f5559d31706aa2797b1db4db2b40eb52412ae114; fo=q05lmopjl8fmylsux9byxSjTLENgKV-4ipMdDQp-SLTAGxXwYZobroRBHD1KFioLJQ_m4i4bzDX8j0BJpGXLBz2wIJmVGXHI1TQ9GnwO2zwfYM57P1y_9x63JedWiTCtmMTS_2oq6gQjHLy80XK-HTRvB73qiPBt2lLMIwltjGVZvDTBfHWhHckWUW4",
+    "X-Requested-With": "XMLHttpRequest"
 }
 
 SEAT_TYPES = {
@@ -44,10 +45,41 @@ SEAT_TYPES = {
     "其他": 22,
 }
 
+
 def generate_header():
+    """自定义请求头
+
+    Returns:
+        _type_: 请求头
+    """    
     chrome_ua:list = UserAgent().data_browsers['chrome']
     ua = random.choice(chrome_ua)
+    # 伪造ua
     FAKE_HEADERS['User-Agent'] = ua
+    # 更新cookie
+    return update_cookie(FAKE_HEADERS)
+
+def update_cookie(FAKE_HEADERS:dict[str,str]):
+    """更新cookie
+    """ 
+    # 当前时间戳
+    now = int(time.time())
+    glovar = Glovar()
+    # 如果cookie字段为空 直接获取cookie 设置expire_date
+    # 如果cookie字段不为空 根据expire_date判断是否过期 
+        # 过期调用fk_selenium刷新token
+        # 没过期 不操作
+    if glovar.cookie != '' and glovar.cookie_expire_time>=now:
+        # 没过期
+        FAKE_HEADERS['Cookie'] = glovar.cookie
+    else:
+        # 手动刷新
+        res:tuple = fk_selenium.refresh_cookie()
+        expire_date = res[0]
+        glovar.cookie_expire_time = expire_date
+
+        FAKE_HEADERS['Cookie'] = res[1]
+        glovar.cookie = res[1]
     return FAKE_HEADERS
 
 class Singleton(type):
@@ -88,6 +120,10 @@ class Glovar(metaclass=Singleton):
         self.gcd = opts.gcd
         self.ktz = opts.ktz
         self.remaining = opts.remaining
+        # cookie
+        self.cookie:str = ''
+        # cookie过期时间
+        self.cookie_expire_time = int(time.time())
 
         # 获得所有站点编码的名称对应信息
         stations = open(opts.stations_file, "r", encoding="utf-8").read()

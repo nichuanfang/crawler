@@ -17,6 +17,9 @@ from .glovar import Glovar
 from .request import Request
 from .utils import code_to_station, station_to_code, colorize
 import json
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 class Train:
     """
@@ -181,6 +184,8 @@ class TrainTable:
         tb = pt.PrettyTable()
         tb.field_names = ["车次", "发车", "出发站", "到达站", "到达", "余票", "历时"]
         self.cleanup()
+        if self.trains_list.__len__()==0:
+            return '当日无车次信息!'
         for train in self.trains_list:
             tb.add_row(train.row)
         return tb.get_html_string()
@@ -234,6 +239,7 @@ class TrainTable:
         :param no_list: 选择车次列表
         :return: 返回搜索结果列表，每一项是一个Train对象
         """
+        logging.info('from=>{},to=>{},date=>{},no_list=>{}开始获取余票信息...'.format(code_to_station(fs_code),code_to_station(ts_code),date,no_list))
         glovar = Glovar()
         req = Request()
         s = req.get_session()
@@ -246,7 +252,6 @@ class TrainTable:
         }
         try:
             # 发送请求
-            print(params)
             r = s.get(
                 "https://kyfw.12306.cn/otn/leftTicket/query", params=params, timeout=10
             )
@@ -281,10 +286,12 @@ class TrainTable:
                     train.remaining.append(fields[i] or "--")
                 train_list.append(train)
         except Exception as e:
-            print(e)
+            # print(e)
             # print(r.text)
-            print(s.headers)
+            # print(s.headers)
+            # print('请求太频繁,请稍后尝试!')
             train_list = []
+            raise RuntimeError('请求太频繁,请稍后尝试!')
         return train_list
 
     def _query_trains_zmode(self, fs_code, ts_code, date, no_list) -> list:
@@ -309,7 +316,11 @@ class TrainTable:
                 else:
                     stations_dict[station[0]] = [train.no]
         for station, trains in stations_dict.items():
-            time.sleep(1)
-            trains_list += self._query_trains_basic(fs_code, station, date, trains)
+            time.sleep(1.5)
+            try:
+                trains_list += self._query_trains_basic(fs_code, station, date, trains)
+            except Exception as e:
+                print(e.__str__)
+                continue
 
         return trains_list

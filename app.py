@@ -5,14 +5,17 @@ import json
 
 
 from fk12306.train import TrainTable
-from fk12306.config import Options
+from fk12306.glovar import Glovar
+from fk12306.glovar import SEAT_TYPES
+from fk12306 import utils
+from fk12306 import fk_selenium
 
 
 import datetime
 
 app = Flask(__name__)
 
-app.debug = True
+# app.debug = True
 
 
 @app.route(rule='/get', methods=['get'])
@@ -58,9 +61,9 @@ def ticket():
         end = request.values['end'].replace('\'','').replace('\"','')
     if request.values.__contains__('offset'):
         try:
-            # comment: 
             offset = int(request.values['offset'])
-            pass
+            if offset < 0:
+                return 'offset必须大于等于0'
         except Exception as e:
             offset = 0
     else:
@@ -82,7 +85,85 @@ def ticket():
     return query_tickets(begin,end,offset,seats,train_no,zmode,zzmode,gcd,ktz,remaining)
 
 
+def query_tickets(begin: str, end: str, offset:int, seats:str|None, train_no:str|None
+                  ,zmode:bool,zzmode:bool,gcd:bool,ktz:bool,remaining:bool):
+    """查询余票(默认当天 普通模式 有票 高铁动车)
+    
+    Args:
+        begin (str):出发地
 
+        end (str):目的地
+
+        offset (int):偏移量 距离今天的偏移量 默认为0 例如  1: 明天 -1:昨天
+
+        seats (str):座位类型  一等座 二等座 无座  格式: 空格分隔
+
+        train_no(str):默认不限制 限制车次  格式: 空格分隔
+
+        zmode (bool):模式 是否开启高级模式 默认False
+
+        zzmode(bool):模式 是否开启终极模式 默认False
+
+        gcd(bool): 只看高铁
+
+        ktz(bool): 只看火车
+
+        remaining(bool): 只看有票
+    """
+
+    glovar = Glovar()
+
+    glovar.fs_code = utils.station_to_code(begin)
+    if glovar.fs_code is None or glovar.fs_code == '':
+        return '起点{}不是市级地点!'.format(begin)
+    glovar.fs = begin
+
+    glovar.ts_code = utils.station_to_code(end)
+    if glovar.ts_code is None or glovar.ts_code == '':
+        return '终点{}不是市级地点!'.format(end)
+    glovar.ts = end
+
+    if offset:
+        glovar.date = (datetime.datetime.now() +
+                    datetime.timedelta(days=offset)).strftime('%Y-%m-%d')
+    else:
+        glovar.date = (datetime.datetime.now()).strftime('%Y-%m-%d')
+    glovar.seats_list = []
+    glovar.seats_idx_list = []
+    if seats:
+        handle_seats(seats,glovar)
+    else:
+        handle_seats('一等座 二等座 无座',glovar)
+    if train_no:
+        glovar.no_list = train_no.split()
+    else:
+        glovar.no_list = []
+    glovar.zmode = zmode
+    glovar.zzmode = zzmode
+    glovar.gcd = gcd
+    glovar.ktz = ktz
+    glovar.remaining = remaining
+    # if proxies_file:
+    #     opts.proxies_file = proxies_file
+    # if stations_file:
+    #     opts.stations_file = stations_file
+    # if cdn_file:
+    #     opts.cdn_file = cdn_file
+    tt = TrainTable()
+    try:
+        tt.update_trains()   # type: ignore
+    except Exception as e:
+        return e.__str__()
+    return tt.output()
+
+
+def handle_seats(seats,gloval):
+    # 处理座位选择   seats（格式：一等座 二等座 无座） 
+    for seat in seats.split():
+        if seat not in SEAT_TYPES:
+            continue
+        gloval.seats_list.append(seat)
+        gloval.seats_idx_list.append(SEAT_TYPES[seat])
 
 
 def handle_bool(request,var:str):
@@ -105,59 +186,6 @@ def handle_bool(request,var:str):
             except Exception as e:
                 return res
     return res
-
-
-
-def query_tickets(begin: str, end: str, offset:int, seats:str|None, train_no:str|None
-                  ,zmode:bool,zzmode:bool,gcd:bool,ktz:bool,remaining:bool):
-    """查询余票(默认当天 普通模式 有票 高铁动车)
-    
-    Args:
-        begin (str):出发地
-
-        end (str):目的地
-
-        offset (int):偏移量 距离今天的偏移量 默认为0 例如  1: 明天 -1:昨天
-
-        seats (str):座位类型  一等座   二等座   无座
-
-        train_no(str):默认不限制 限制车次
-
-        zmode (bool):模式 是否开启高级模式 默认False
-
-        zzmode(bool):模式 是否开启终极模式 默认False
-
-        gcd(bool): 只看高铁
-
-        ktz(bool): 只看火车
-
-        remaining(bool): 只看有票
-    """
-    opts = Options()
-    opts.fs = begin
-    opts.ts = end
-    if offset:
-        opts.date = (datetime.datetime.now() +
-                    datetime.timedelta(days=offset)).strftime('%Y-%m-%d')
-    if seats:
-        opts.seats = seats
-    if train_no:
-        opts.train_no = train_no
-    opts.zmode = zmode
-    opts.zzmode = zzmode
-    opts.gcd = gcd
-    opts.ktz = ktz
-    opts.remaining = remaining
-    # if proxies_file:
-    #     opts.proxies_file = proxies_file
-    # if stations_file:
-    #     opts.stations_file = stations_file
-    # if cdn_file:
-    #     opts.cdn_file = cdn_file
-    tt = TrainTable()
-    tt.update_trains()   # type: ignore
-    return tt.output()
-
 
 if __name__ == '__main__':
     # 开启http服务
