@@ -188,7 +188,7 @@ class TrainTable:
             return '当日无车次信息!'
         for train in self.trains_list:
             tb.add_row(train.row)
-            logging.info('==============车次信息:{}========='.format(train.row))
+            # logging.info('==============车次信息:{}========='.format(train.row))
         return tb.get_html_string()
 
     def cleanup(self):
@@ -283,6 +283,15 @@ class TrainTable:
                 train.start_time = fields[8]
                 train.end_time = fields[9]
                 train.duration = fields[10]
+                logging.info('======================列车信息START==========================')
+                logging.info('==========编号全称:{}==========='.format(fields[2]))
+                logging.info('==========编号简称:{}==========='.format(fields[3]))
+                logging.info('==========起点编码:{}==========='.format(fields[6]))
+                logging.info('==========终点编码:{}==========='.format(fields[7]))
+                logging.info('==========开始时间:{}==========='.format(fields[8]))
+                logging.info('==========结束时间:{}==========='.format(fields[9]))
+                logging.info('==========间隔:{}==========='.format(fields[10]))
+                logging.info('======================列车信息END==========================')
                 for i in glovar.seats_idx_list:
                     train.remaining.append(fields[i] or "--")
                 train_list.append(train)
