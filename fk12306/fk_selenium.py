@@ -1,4 +1,5 @@
 #!/usr/local/bin/python3
+# coding=utf-8 
 import time
 from datetime import date, timedelta
 from selenium import webdriver

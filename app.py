@@ -1,4 +1,5 @@
 #!/usr/local/bin/python3
+# coding=utf-8 
 from re import I
 from flask import Flask, request, jsonify
 
