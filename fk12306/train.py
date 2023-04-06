@@ -9,6 +9,7 @@
     搜索结果中的班次信息
 """
 
+from email import header
 import time
 import re
 import prettytable as pt
@@ -105,17 +106,17 @@ class Train:
     @property
     def row(self) -> list:
         """ 关键信息列表 """
-        colored_remaining = [
-            colorize(s, "green") if s != "无" and s != "--" else s
-            for s in self.remaining
-        ]
-        remaining_seats = "/".join(colored_remaining)
-        if re.match("[GCD]", self.no):
-            colored_no = colorize(self.no, self.no[0].lower())
-        else:
-            colored_no = colorize(self.no, "o")
+        # colored_remaining = [
+        #     colorize(s, "green") if s != "无" and s != "--" else s
+        #     for s in self.remaining
+        # ]
+        remaining_seats = "/".join(self.remaining)
+        # if re.match("[GCD]", self.no):
+            # colored_no = colorize(self.no, self.no[0].lower())
+        # else:
+            # colored_no = colorize(self.no, "o")
         return [
-            colored_no,
+            self.no,
             self.start_time,
             self._fs,
             self._ts,
@@ -181,14 +182,13 @@ class TrainTable:
         """
         对外调用的方法，用来返回查询结果
         """
-        tb = pt.PrettyTable()
+        tb = pt.PrettyTable(header = True,border=True,align='c',padding_width=10)
         tb.field_names = ["车次", "发车", "出发站", "到达站", "到达", "余票", "历时"]
         self.cleanup()
         if self.trains_list.__len__()==0:
             return '当日无车次信息!'
         for train in self.trains_list:
             tb.add_row(train.row)
-            # logging.info('==============车次信息:{}========='.format(train.row))
         return tb.get_html_string()
 
     def cleanup(self):
@@ -285,7 +285,6 @@ class TrainTable:
                 train.duration = fields[10]
                 for i in glovar.seats_idx_list:
                     train.remaining.append(fields[i] or "--")
-                logging.info('===============================train信息:{}==============================='.format(json.dumps(train.__dict__)))
                 train_list.append(train)
         except Exception as e:
             # print(e)
