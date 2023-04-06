@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3
 from re import I
 from flask import Flask, request, jsonify
 

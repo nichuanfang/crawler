@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3
 import time
 from datetime import date, timedelta
 from selenium import webdriver
@@ -55,9 +56,9 @@ options.add_argument('--ignore-certificate-errors')
 # options.add_argument('log-level=3')
 # 禁止打印日志
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
-
+executable_path = '/usr/local/bin/chromedriver'
 def refresh_cookie() -> tuple[int,str]:
-    driver = webdriver.Chrome(chrome_options=options)
+    driver = webdriver.Chrome(executable_path=executable_path,chrome_options=options)
     # 绕过检测
     with open('stealth.min.js', 'r') as f:
         js = f.read()
