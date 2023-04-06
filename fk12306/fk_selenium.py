@@ -26,9 +26,12 @@ chrome_ua:list = UserAgent().data_browsers['chrome']
 ua = random.choice(chrome_ua)
 
 
-
 # 谷歌驱动设置
 options = webdriver.ChromeOptions()
+options.add_argument('--no-sandbox')
+# 不用打开界面 无头浏览器
+options.add_argument('--headless')
+options.add_argument('--disable-dev-shm-usage')
 # 设置User-Agent
 options.add_argument(f'user-agent={ua}')
 # 添加代理 代理还是有问题 todo待解决
@@ -40,9 +43,6 @@ options.add_argument('--disable-blink-features')
 options.add_argument('--disable-blink-features=AutomationControlled')
 options.add_argument('--disable-extensions')
 options.add_argument('--no-default-browser-check')
-options.add_argument('--disable-dev-shm-usage')
-# 不用打开界面 无头浏览器
-options.add_argument('--headless')
 # 避免某些网页出错
 options.add_argument('--disable-gpu')
 # 最大化
