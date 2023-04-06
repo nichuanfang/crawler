@@ -261,6 +261,7 @@ class TrainTable:
             train_list = []
             for raw in raws:
                 fields = raw.split("|")
+                logging.info('========爬虫信息:{}==========='.format(fields))
                 # 如果限制了车次，且搜索车次不在目标车次中则丢弃
                 if no_list and fields[3] not in no_list:
                     continue

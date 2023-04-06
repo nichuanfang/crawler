@@ -1,5 +1,6 @@
 #!/usr/local/bin/python3
 # coding=utf-8 
+import logging
 import time
 from datetime import date, timedelta
 from selenium import webdriver
@@ -13,6 +14,9 @@ from selenium import webdriver
 import io
 import sys
 from fake_useragent import UserAgent
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 # ip代理池 防止被屏蔽 很重要
 proxy_arr = [
@@ -60,6 +64,7 @@ options.add_argument('--ignore-certificate-errors')
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 executable_path = '/usr/local/bin/chromedriver'
 def refresh_cookie() -> tuple[int,str]:
+    logging.info('=========开始获取cookie==========')
     driver = webdriver.Chrome(executable_path=executable_path,chrome_options=options)
     # 绕过检测
     with open('stealth.min.js', 'r') as f:
@@ -99,6 +104,7 @@ def refresh_cookie() -> tuple[int,str]:
         expiry = cookies[0]['expiry']
         if expiry is not None and expiry != '' and expire_time < expiry:
             expire_time = expiry
+    logging.info('=========已获取cookie:{}=========='.format(Cookie[:-1]))
     return (expire_time,Cookie[:-1])
 
 # sure = driver.find_element_by_class_name("btn-primary");
