@@ -40,6 +40,7 @@ options.add_argument('--disable-blink-features')
 options.add_argument('--disable-blink-features=AutomationControlled')
 options.add_argument('--disable-extensions')
 options.add_argument('--no-default-browser-check')
+options.add_argument('--disable-dev-shm-usage')
 # 不用打开界面 无头浏览器
 options.add_argument('--headless')
 # 避免某些网页出错
