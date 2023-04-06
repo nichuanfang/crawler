@@ -188,6 +188,7 @@ class TrainTable:
             return '当日无车次信息!'
         for train in self.trains_list:
             tb.add_row(train.row)
+            logging.info('==============车次信息:{}========='.format(train.row))
         return tb.get_html_string()
 
     def cleanup(self):
@@ -261,7 +262,6 @@ class TrainTable:
             train_list = []
             for raw in raws:
                 fields = raw.split("|")
-                logging.info('========爬虫信息:{}==========='.format(fields))
                 # 如果限制了车次，且搜索车次不在目标车次中则丢弃
                 if no_list and fields[3] not in no_list:
                     continue
