@@ -188,7 +188,7 @@ class TrainTable:
             return '当日无车次信息!'
         for train in self.trains_list:
             tb.add_row(train.row)
-        return tb.get_html_string()
+        return tb.get_string()
 
     def cleanup(self):
         """ 处理trains_list，排序和删除无效数据 """
