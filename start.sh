@@ -1,2 +1,2 @@
 #!/bin/bash
-nohup /usr/local/bin/python3 /root/code/fk12306/app.py >/dev/null 2>&1 &
+nohup /usr/local/bin/python /root/code/fk12306/app.py 1>/var/log/fk12306.log 2>&1 &
