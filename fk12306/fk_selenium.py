@@ -67,7 +67,7 @@ def refresh_cookie() -> tuple[int,str]:
     logging.info('=========开始获取cookie==========')
     driver = webdriver.Chrome(executable_path=executable_path,chrome_options=options)
     # 绕过检测
-    with open('stealth.min.js', 'r') as f:
+    with open('/root/code/fk12306/stealth.min.js', 'r') as f:
         js = f.read()
     # 调用函数在页面加载前执行脚本
     driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {'source': js})
