@@ -12,6 +12,8 @@
 from email import header
 import time
 import re
+
+from requests import Response
 import prettytable as pt
 
 from .glovar import Glovar
@@ -251,10 +253,11 @@ class TrainTable:
             "leftTicketDTO.to_station": ts_code,
             "purpose_codes": "ADULT",
         }
+        r = Response()
         try:
             # 发送请求
             r = s.get(
-                "https://kyfw.12306.cn/otn/leftTicket/query", params=params, timeout=10
+                "https://kyfw.12306.cn/otn/leftTicket/queryZ", params=params, timeout=10
             )
             j = r.json()
             raws = j["data"]["result"]
@@ -292,7 +295,8 @@ class TrainTable:
             # print(s.headers)
             # print('请求太频繁,请稍后尝试!')
             train_list = []
-            raise RuntimeError('请求太频繁,请稍后尝试!')
+            logging.error('===========请求太频繁或者系统内部错误,响应体:{}======='.format(r.text))
+            raise RuntimeError('请求太频繁或者系统内部错误,请稍后尝试!')
         return train_list
 
     def _query_trains_zmode(self, fs_code, ts_code, date, no_list) -> list:

@@ -116,12 +116,12 @@ def query_tickets(begin: str, end: str, offset:int, seats:str|None, train_no:str
 
     glovar.fs_code = utils.station_to_code(begin)
     if glovar.fs_code is None or glovar.fs_code == '':
-        return '起点{}不是市级地点!'.format(begin)
+        return '起点{}不是市级地点或者不包含该地点!'.format(begin)
     glovar.fs = begin
 
     glovar.ts_code = utils.station_to_code(end)
     if glovar.ts_code is None or glovar.ts_code == '':
-        return '终点{}不是市级地点!'.format(end)
+        return '终点{}不是市级地点或者不包含该地点!'.format(end)
     glovar.ts = end
 
     if offset:
