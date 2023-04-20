@@ -12,7 +12,8 @@ from os import path
 import time
 from fake_useragent import UserAgent
 import random
-from fk12306 import fk_selenium
+
+from . import fk_crawler
 
 from .config import Options
 
@@ -74,7 +75,7 @@ def update_cookie(FAKE_HEADERS:dict[str,str]):
         FAKE_HEADERS['Cookie'] = glovar.cookie
     else:
         # 手动刷新
-        res:tuple = fk_selenium.refresh_cookie()
+        res:tuple = fk_crawler.refresh_cookie()
         expire_date = res[0]
         glovar.cookie_expire_time = expire_date
 

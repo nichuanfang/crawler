@@ -1,5 +1,8 @@
 #!/usr/local/bin/python
 # coding=utf-8 
+
+# 12306抢票软件
+
 """
 @author: HJK
 @file: __init__.py
