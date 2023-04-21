@@ -1,15 +1,16 @@
 #!/bin/bash
 # 重新构建镜像 (修改版本)
 docker rm -vf crawler
+docker rmi -f registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest
 echo '开始构建镜像...'
-docker build -t registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest --build-arg CRAWLER_VERSION=v1.0.0 /root/docker/dockerfile_work/crawler
+docker build -t registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest /root/docker/dockerfile_work/crawler
 echo '镜像构建完成!'
 # 推送到阿里云镜像仓库
 echo '推送镜像到阿里云镜像仓库...'
 docker push registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest
 echo '推送镜像到阿里云镜像仓库完成!'
-# 删除本地镜像
-echo '开始清理本地残留镜像...'
+# 删除本地中间镜像
+echo '开始清理本地中间镜像...'
 docker rmi -f $(docker images | grep crawler | awk '{print $3}')
 docker rmi -f ubuntu:latest
 echo '本地残留镜像清理完成!'
