@@ -1,3 +1,6 @@
+#!/usr/local/bin/python
+# coding=utf-8
+import lxml 
 from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By

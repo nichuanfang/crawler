@@ -7,6 +7,7 @@ from my_selenium.my_selenium import driver,BeautifulSoup,ActionChains,By,logging
 from my_selenium.my_selenium import get_soup
 import random
 import requests
+import subprocess
 
 def craw_wallpaper():
     soup = get_soup('https://wallhaven.cc/search?categories=110&purity=100&atleast=1600x900&sorting=hot&order=desc&ai_art_filter=1')
@@ -30,17 +31,20 @@ def craw_wallpaper():
             url = img_ele['src']
             urls.append(url)
             r = requests.get(url)
-            with open('/root/assets/img/bg'+'/'+'bg{}.jpg'.format(index),'wb') as f:
+            with open('/assets/img/bg'+'/'+'bg{}.jpg'.format(index),'wb') as f:
                 f.write(r.content)
             logging.info('已刮削图片:{}'.format(url))
             img_names.append('bg{}.jpg'.format(index))
         index+=1
 
     # 随机一张图片保存到vscode中
-    with open('/root/assets/img/bg'+'/'+random.choice(img_names),'rb') as f:
-        with open('/root/assets/img/bg/vscode'+ '/'+'vscode-bg.jpg','wb') as vscf:
+    with open('/assets/img/bg'+'/'+random.choice(img_names),'rb') as f:
+        with open('/assets/img/bg/vscode'+ '/'+'vscode-bg.jpg','wb') as vscf:
             vscf.write(f.read())
     logging.info('壁纸已更新')
+    # 执行宿主机命令 重启nginx
+    print(subprocess.call('nsenter -m -u -i -n -p -t 1 sh -c "docker restart nginx"',shell=True))
+    logging.info('已重启nginx')
 
 if __name__ == '__main__':
     craw_wallpaper()
