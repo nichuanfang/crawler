@@ -1,7 +1,7 @@
 #!/bin/bash
 # 重新构建镜像 (修改版本)
 docker rm -vf crawler
-docker build -t registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest --build-arg CRAWLER_VERSION=v1.0.0 .
+docker build -t registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest --build-arg CRAWLER_VERSION=v1.0.0 /root/docker/dockerfile_work/crawler
 # 推送到阿里云镜像仓库
 docker push registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest
 # 删除本地镜像
