@@ -10,7 +10,7 @@ import requests
 import subprocess
 
 def craw_wallpaper():
-    soup = get_soup('https://wallhaven.cc/search?categories=110&purity=100&atleast=1600x900&sorting=hot&order=desc&ai_art_filter=1')
+    soup = get_soup('https://wallhaven.cc/search?categories=111&purity=100&resolutions=3440x1440%2C1600x900%2C1920x1080%2C2560x1440%2C3840x2160&sorting=hot&order=desc&ai_art_filter=0')
 
     #拖动到页面最底部，=0为拖动到页面最顶部  分多少页就滚动几次
     # scroll_js="var q=document.documentElement.scrollTop=10000"
