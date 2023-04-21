@@ -4,7 +4,7 @@ import time
 import sys
 sys.path.append('../../')
 from my_selenium.my_selenium import driver,BeautifulSoup,ActionChains,By,logging
-from my_selenium.my_selenium import getsoup
+from my_selenium.my_selenium import get_soup
 
 
 def refresh_cookie() -> tuple[int,str]:
@@ -43,6 +43,7 @@ def refresh_cookie() -> tuple[int,str]:
         if expiry is not None and expiry != '' and expire_time < expiry:
             expire_time = expiry
     logging.info('=========已获取cookie:{}=========='.format(Cookie[:-1]))
+    driver.close()
     return (expire_time,Cookie[:-1])
 
 # sure = driver.find_element_by_class_name("btn-primary");
@@ -73,6 +74,6 @@ def refresh_cookie() -> tuple[int,str]:
 #     except:
 #         pass;
 if __name__ == '__main__':
-    # soup = getsoup('https://www.baidu.com')
+    # soup = get_soup('https://www.baidu.com')
     # print(soup.prettify())
     pass

@@ -64,12 +64,28 @@ with open('/app/crawler/my_selenium/stealth.min.js', 'r') as f:
   js = f.read()
     # 调用函数在页面加载前执行脚本
 driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {'source': js})
+# 隐形等待20秒
+driver.implicitly_wait(20)
 
-def getsoup(url:str):
+def get_soup(url:str):
   """获取BeautifulSoup对象 lxml解析
 
   Args:
       url (str): _网址_
   """  
+  driver.get(url)
+  html = driver.page_source
+  return BeautifulSoup(html,"lxml")
+
+
+def get_frame_soup(url:str,frame_id:str):
+  """获取BeautifulSoup对象 lxml解析 前端使用frame骨架
+
+  Args:
+      url (str): _网址_
+      frame_id (str): frame的id
+  """  
+  driver.switch_to.frame(frame_id)
+  driver.get(url)
   html = driver.page_source
   return BeautifulSoup(html,"lxml")
