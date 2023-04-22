@@ -3,6 +3,7 @@
 from flask import Flask
 from api import fk12306_api
 from api import cron_api
+from api import tmdb_api
 from cron.job.wallpaper_crawling import craw_wallpaper
 from my_selenium.my_selenium import logging
 
@@ -94,6 +95,33 @@ def resume_job():
         return cron_api.resume_job()
     except Exception as e:
         return e.__str__()
+
+# ==========================================tmdb刮削=====================================================
+@app.route(rule='/tmdb/movie', methods=['get'])
+def tmdb_movie():
+    """获取刮削电影信息
+
+    Returns:
+        _type_: 结果
+    """    
+    try:
+        return tmdb_api.tmdb_movie()
+    except Exception as e:
+        return e.__str__()
+
+@app.route(rule='/tmdb/scrape_movie', methods=['get'])
+def tmdb_scrape_movie():
+    """刮削电影
+
+    Returns:
+        _type_: 结果
+    """    
+    try:
+        return tmdb_api.tmdb_scrape_movie()
+    except Exception as e:
+        return e.__str__()
+
+
 
 # ===========================================主程序======================================================
 if __name__ == '__main__':
