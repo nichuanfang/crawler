@@ -2,6 +2,8 @@
 # coding=utf-8 
 
 # 定时任务api
+from api.base_api import get_required
+from api.base_api import get_not_required
 import datetime
 from cron.my_scheduler import scheduler
 from flask import request
@@ -35,23 +37,9 @@ def execute_job():
 # 修改job
 def reschedule_job():
     trigger_args = parse_qs(urlparse(request.url).query)
-    if not request.values.__contains__('job_id'):
-        return 'job_id参数必填!'
-    else:
-        trigger_args.pop('job_id')
-        job_id = request.values['job_id'].replace('\'','').replace('\"','')
-
-    if not request.values.__contains__('trigger'):
-        return 'trigger参数必填!'
-    else:
-        trigger_args.pop('trigger')
-        trigger = request.values['trigger'].replace('\'','').replace('\"','')
-
-    if not request.values.__contains__('jobstore'):
-        jobstore = None
-    else:
-        trigger_args.pop('jobstore')
-        jobstore = request.values['jobstore'].replace('\'','').replace('\"','')
+    job_id = get_required('job_id')
+    trigger = get_required('trigger')
+    jobstore = get_not_required('jobstore')
     new_trigger_args = {}
     for key in trigger_args:
         new_trigger_args[key] = trigger_args[key][0].replace('\'', '').replace('\"','')

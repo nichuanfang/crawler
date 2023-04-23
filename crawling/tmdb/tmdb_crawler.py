@@ -11,8 +11,8 @@ import requests
 import subprocess
 from urllib import request, parse
 
-def tmdb_movie(origin:str):
-    url = 'https://www.themoviedb.org/search/movie?query={}'.format(origin)
+def tmdb_movie(origin:str,file_id:str):
+    url = f'https://www.themoviedb.org/search/movie?query={origin}'
     soup = get_soup(url)
     # 返回电影名集合
     
@@ -22,21 +22,33 @@ def tmdb_movie(origin:str):
 
     movies = soup.findAll('div',id=re.compile(r'^card_movie_[A-Za-z0-9]+$'))
     for movie in movies:
-        year = movie.span.text[:4]
-        movie_name = movie.contents[1].contents[3].contents[1].contents[1].a.text
+        href_suffix = movie.a['href']
+        # 跳转到详情页面
+        href = f'https://www.themoviedb.org{href_suffix}'
+        href_soup = get_soup(href)
+        # 获取真正的电影名
+        name = href_soup.findAll('h2')[0].text.replace('\n',' ').strip()
+
         if movie.contents[1].img is not None:
             img_url = 'https://www.themoviedb.org' + movie.contents[1].img['srcset'].split(',')[1][1:-3]
         else:
             img_url = ''
+        urlencoded_origin = parse.quote(origin)
+        urlencoded_parsed_name = parse.quote(name)
+        # 简述
+        if movie.p is not None:
+            sketch = movie.p.text
+        else:
+            sketch = ''
         data = {
             # 点击链接 直接刮削该电影 生产环境需要替换域名
-            'name': movie_name,
-            'year': year,
-            'scrape_url': 'http://127.0.0.1:5000/tmdb/scrape_movie?origin={}&name={}'.format(parse.quote(origin),parse.quote('{} ({})'.format(movie_name,year))),
+            'name': name,
+            'scrape_url': f'http://127.0.0.1:5000/tmdb/scrape_movie?file_id={file_id}&name={urlencoded_parsed_name}',
             'picture_url': img_url,
-            'sketch': movie.p.text
+            'sketch': sketch
         }
         res.append(data)
+        logging.info(f'{name}')
     return res
 
 
@@ -44,6 +56,4 @@ def scrape_tvshows():
     pass
 
 if __name__ == '__main__':
-    res = tmdb_movie('教父')
-    print(res)
     pass

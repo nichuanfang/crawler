@@ -1,5 +1,7 @@
 #!/usr/local/bin/python
 # coding=utf-8 
+from api.base_api import get_required
+from api.base_api import get_not_required
 from flask import request
 from crawling.fk12306.train import TrainTable
 from crawling.fk12306.glovar import Glovar

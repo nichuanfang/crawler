@@ -39,9 +39,10 @@ def refresh_cookie() -> tuple[int,str]:
     cookies:list = driver.get_cookies()
     for cookie in cookies:
         Cookie+=cookie['name'] + '=' + cookie['value']+';'
-        expiry = cookies[0]['expiry']
-        if expiry is not None and expiry != '' and expire_time < expiry:
-            expire_time = expiry
+        if cookie.__contains__('expiry'):
+            expiry = cookie['expiry']
+            if expiry is not None and expiry != '' and expire_time < expiry:
+                expire_time = expiry
     logging.info('=========已获取cookie:{}=========='.format(Cookie[:-1]))
     driver.close()
     return (expire_time,Cookie[:-1])
