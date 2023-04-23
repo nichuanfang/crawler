@@ -18,14 +18,8 @@ def add_job(job,trigger,**kwargs):
 def execute_job():
     """立刻执行任务
     """    
-    if not request.values.__contains__('job_id'):
-        return 'job_id参数必填!'
-    else:
-        job_id = request.values['job_id'].replace('\'','').replace('\"','')
-    if not request.values.__contains__('jobstore'):
-        jobstore = None
-    else:
-        jobstore = request.values['jobstore'].replace('\'','').replace('\"','')
+    job_id = get_required('job_id')
+    jobstore = get_not_required('jobstore')
     job = scheduler._lookup_job(job_id, jobstore)
     # 新增一个立即执行的任务
     if job[0] is not None:
@@ -48,40 +42,22 @@ def reschedule_job():
 
 # 删除job
 def remove_job():
-    if not request.values.__contains__('job_id'):
-        return 'job_id参数必填!'
-    else:
-        job_id = request.values['job_id'].replace('\'','').replace('\"','')
-    if not request.values.__contains__('jobstore'):
-        jobstore = None
-    else:
-        jobstore = request.values['jobstore'].replace('\'','').replace('\"','')
+    job_id = get_required('job_id')
+    jobstore = get_not_required('jobstore')
     scheduler.remove_job(job_id=job_id,jobstore=jobstore)
     return '任务已移除!'    
 
 # 暂停job
 def pause_job():
-    if not request.values.__contains__('job_id'):
-        return 'job_id参数必填!'
-    else:
-        job_id = request.values['job_id'].replace('\'','').replace('\"','')
-    if not request.values.__contains__('jobstore'):
-        jobstore = None
-    else:
-        jobstore = request.values['jobstore'].replace('\'','').replace('\"','')
+    job_id = get_required('job_id')
+    jobstore = get_not_required('jobstore')
     scheduler.pause_job(job_id=job_id,jobstore=jobstore)
     return '任务已暂停!'
 
 # 恢复job
 def resume_job():
-    if not request.values.__contains__('job_id'):
-        return 'job_id参数必填!'
-    else:
-        job_id = request.values['job_id'].replace('\'','').replace('\"','')
-    if not request.values.__contains__('jobstore'):
-        jobstore = None
-    else:
-        jobstore = request.values['jobstore'].replace('\'','').replace('\"','')
+    job_id = get_required('job_id')
+    jobstore = get_not_required('jobstore')
     scheduler.resume_job(job_id=job_id,jobstore=jobstore)
     return '任务已恢复!'
 

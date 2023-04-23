@@ -19,14 +19,8 @@ def ticket():
         _type_: 余票信息
     """    
     values = request.values
-    if not request.values.__contains__('begin'):
-        return 'begin参数必填!'
-    else:
-        begin = request.values['begin'].replace('\'','').replace('\"','')
-    if not request.values.__contains__('end'):
-        return 'end参数必填!'
-    else:
-        end = request.values['end'].replace('\'','').replace('\"','')
+    begin = get_required('begin')
+    end = get_required('end')
     if request.values.__contains__('offset'):
         try:
             offset = int(request.values['offset'])
@@ -36,14 +30,8 @@ def ticket():
             offset = 0
     else:
         offset = 0
-    if request.values.__contains__('seats'):
-        seats = request.values['seats']
-    else:
-        seats = None
-    if request.values.__contains__('train_no'):
-        train_no = request.values['train_no']
-    else:
-        train_no = None
+    seats = get_not_required('seats')
+    train_no = get_not_required('train_no')
     zmode = handle_bool(request,'zmode')
     zzmode = handle_bool(request,'zzmode')
     gcd = handle_bool(request,'gcd')

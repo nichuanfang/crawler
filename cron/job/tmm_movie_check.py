@@ -1,6 +1,7 @@
 # 检测tmm/tmm-movies文件夹是否存在已刮削好的电影文件夹 有就移至movies文件夹
 from aliyundrive import ali_drive
 from aligo.types.BaseFile import BaseFile
+from aligo.response import CreateFileResponse
 import subprocess
 
 # 指定时间后执行该检查
@@ -48,10 +49,17 @@ def move_to_movies(parent_file_id:str,tmm_file_id:str,path_list:list):
         for path in path_list:
             # 如果是最后一个元素 则移动第一个文件夹到final_path
             if path == path_list[-1]:
-                src_file = ali_drive.get_folder_by_path(file_path)
+                src_file: BaseFile | CreateFileResponse | None = ali_drive.get_folder_by_path(file_path)
                 assert src_file is not None
                 desc_file = ali_drive.get_folder_by_path(final_path)
                 assert desc_file is not None
+                # 如果final_path下面存在同名文件夹则覆盖
+                desc_file_list = ali_drive.get_file_list(desc_file.file_id)
+                if len(desc_file_list)!=0:
+                    for desc_file_item in desc_file_list:
+                        if not isinstance(src_file,CreateFileResponse)  and desc_file_item.name == src_file.name:
+                            ali_drive.move_to_trash(desc_file_item.file_id)
+                        pass
                 ali_drive.move(src_file.file_id,desc_file.file_id)
                 # 移除final_path_dp的空文件夹
                 for dp in final_path_dp:

@@ -10,6 +10,7 @@ import requests
 import subprocess
 
 def craw_wallpaper():
+    root_path = '/assets/img/bg'
     soup = get_soup('https://wallhaven.cc/search?categories=111&purity=100&resolutions=3440x1440%2C1600x900%2C1920x1080%2C2560x1440%2C3840x2160&sorting=hot&order=desc&ai_art_filter=0')
 
     #拖动到页面最底部，=0为拖动到页面最顶部  分多少页就滚动几次
@@ -31,15 +32,15 @@ def craw_wallpaper():
             url = img_ele['src']
             urls.append(url)
             r = requests.get(url)
-            with open('/assets/img/bg'+'/'+'bg{}.jpg'.format(index),'wb') as f:
+            with open(root_path+'/'+f'bg{index}.jpg','wb') as f:
                 f.write(r.content)
-            logging.info('已刮削图片:{}'.format(url))
-            img_names.append('bg{}.jpg'.format(index))
+            logging.info(f'已刮削图片:{url}')
+            img_names.append(f'bg{index}.jpg')
         index+=1
 
     # 随机一张图片保存到vscode中
-    with open('/assets/img/bg'+'/'+random.choice(img_names),'rb') as f:
-        with open('/assets/img/bg/vscode'+ '/'+'vscode-bg.jpg','wb') as vscf:
+    with open(root_path+'/'+random.choice(img_names),'rb') as f:
+        with open(f'{root_path}/vscode'+ '/'+'vscode-bg.jpg','wb') as vscf:
             vscf.write(f.read())
     logging.info('壁纸已更新')
     # 执行宿主机命令 重启nginx

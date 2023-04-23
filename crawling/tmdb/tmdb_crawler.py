@@ -1,15 +1,15 @@
 #!/usr/local/bin/python
 # coding=utf-8
+from environment import *
 import sys
 sys.path.append('../../')
 # tmdb电影/剧集
 from my_selenium.my_selenium import driver, BeautifulSoup, ActionChains, By, logging
 from my_selenium.my_selenium import get_soup
 import re
-import random
-import requests
-import subprocess
 from urllib import request, parse
+
+env = Env()
 
 def tmdb_movie(origin:str,file_id:str):
     url = f'https://www.themoviedb.org/search/movie?query={origin}'
@@ -43,7 +43,7 @@ def tmdb_movie(origin:str,file_id:str):
         data = {
             # 点击链接 直接刮削该电影 生产环境需要替换域名
             'name': name,
-            'scrape_url': f'http://127.0.0.1:5000/tmdb/scrape_movie?file_id={file_id}&name={urlencoded_parsed_name}',
+            'scrape_url': f'{env.crawler_base_url}/tmdb/scrape_movie?file_id={file_id}&name={urlencoded_parsed_name}',
             'picture_url': img_url,
             'sketch': sketch
         }

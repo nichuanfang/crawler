@@ -1,6 +1,8 @@
 import logging
 from aligo import Aligo
 from aligo.types.Enum import CheckNameMode
+from aligo.types.BaseFile import BaseFile
+from aligo.response.CreateFileResponse import CreateFileResponse
 from aligo.request import MoveFileRequest
 from aligo.response import MoveFileResponse
 from aligo.response import MoveFileToTrashResponse
@@ -24,7 +26,7 @@ def get_file_by_path(path: str = '/', parent_file_id: str = 'root',
     return aligo.get_file_by_path(path,parent_file_id,check_name_mode,drive_id)
 
 def get_folder_by_path( path: str = '/', parent_file_id: str = 'root', create_folder: bool = False,
-            check_name_mode: CheckNameMode = 'refuse', drive_id: str = None): # type: ignore
+            check_name_mode: CheckNameMode = 'refuse', drive_id: str = None) -> BaseFile | CreateFileResponse | None: # type: ignore
     """根据文件路径，获取网盘文件对象
 
     Args:

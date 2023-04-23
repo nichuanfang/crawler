@@ -1,5 +1,6 @@
 #!/usr/local/bin/python
 # coding=utf-8 
+from environment import *
 from flask import Flask
 from api import fk12306_api
 from api import cron_api
@@ -12,7 +13,6 @@ from aliyundrive import ali_drive
 app = Flask(__name__)
 
 # app.debug = True
- 
 
 #=====================================fk12306=====================================================
 @app.route(rule='/fk12306/ticket', methods=['get'])
@@ -161,6 +161,9 @@ def tmdb_scrape_movie():
 
 # ===========================================主程序======================================================
 if __name__ == '__main__':
+    env = Env()
+    # 切换环境
+    env.__switch_to_dev__()
     # 开启http服务
 
     # query_tickets('杭州','武汉')
@@ -172,4 +175,4 @@ if __name__ == '__main__':
     logging.info('壁纸刮削任务已启动...')
 
     # 启动爬虫主程序
-    app.run('0.0.0.0', port=5000)
+    app.run(env.listening_host, port=env.port)

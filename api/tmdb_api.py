@@ -2,6 +2,7 @@
 # coding=utf-8
 
 # tmdb api
+from environment import *
 import datetime
 from email import header
 from time import sleep
@@ -20,6 +21,8 @@ from api.cron_api import add_job
 from cron.job.tmm_movie_check import tmm_movie_check
 import subprocess
 from my_selenium.my_selenium import logging
+
+env = Env()
 
 def rename():
     """文件/文件夹重命名
@@ -48,15 +51,15 @@ def tmm_movies():
                     'name': file.name,
                     'parent_name': parse.unquote(origin),
                     'parent_file_id': file_id,
-                    'rename_url': f'http://127.0.0.1:5000/ali_drive/rename?file_id={file_id}',
-                    'tmdb_movie_url': f'http://127.0.0.1:5000/tmdb/movie?file_id={file_id}&origin={origin}'
+                    'rename_url': f'{env.crawler_base_url}/ali_drive/rename?file_id={file_id}',
+                    'tmdb_movie_url': f'{env.crawler_base_url}/tmdb/movie?file_id={file_id}&origin={origin}'
                 })
                 file_id_list.append(file_id)
         
     ali_drive.aligo.walk_files(callback,tmm_movies_folder.file_id)
     wrapper_res = {}
     wrapper_res['data'] = res
-    wrapper_res['tmm_scrape_url'] = f'http://127.0.0.1:5000/tmm/movie/scrape'
+    wrapper_res['tmm_scrape_url'] = f'{env.crawler_base_url}/tmm/movie/scrape'
     return wrapper_res
 
 
@@ -82,7 +85,7 @@ def tmm_movie_scrape():
     # 3. 生成.nfo的文件夹移至movies中 
 
     # todo tmm启动失败
-    tmm_url = f'http://www.vencenter.cn:7878/api/movie'
+    tmm_url = f'{env.tmm_base_url}/api/movie'
     # post请求体样例
 
     # 1. action: The name of the action to trigger - you will find all implemented actions below
