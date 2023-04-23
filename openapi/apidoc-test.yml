@@ -1,0 +1,40 @@
+openapi: '3.0.2'
+info:
+  title: API Title
+  version: '1.0'
+servers:
+  - url: https://crawler.vencenter.cn
+    description: '生产'
+tags:
+  - name: fk12306
+    description: 12306api
+
+  - name: 定时任务
+    description: 定时任务api
+
+  - name: 阿里云盘
+    description: 阿里云盘api
+
+  - name: tinymediamanager
+    description: tmdb刮削
+
+paths:
+  /fk12306/ticket:
+    get:
+      description: 查询余票
+      summary: 根据参数查询余票
+      tags:
+        - "fk12306"
+      responses:
+        '200':
+          description: OK
+  /job/list:
+    get:
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: OK
+  
+    
+  

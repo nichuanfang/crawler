@@ -1,5 +1,6 @@
 #!/usr/local/bin/python
 # coding=utf-8 
+from os import name
 from environment import *
 from flask import Flask
 from api import fk12306_api
@@ -9,10 +10,16 @@ from cron.job.wallpaper_crawling import craw_wallpaper
 from cron.job.tmm_movie_check import tmm_movie_check
 from my_selenium.my_selenium import logging
 from aliyundrive import ali_drive
+from swagger_ui import api_doc
 
 app = Flask(__name__)
-
 # app.debug = True
+
+# ====================================首页=========================================================
+
+@app.route('/', methods = ['GET', 'POST'])
+def index():
+    return app.redirect('/api/doc')
 
 #=====================================fk12306=====================================================
 @app.route(rule='/fk12306/ticket', methods=['get'])
@@ -22,7 +29,11 @@ def ticket():
     Returns:
         _type_: 余票信息
     """    
-    return fk12306_api.ticket()
+    try:
+        return fk12306_api.ticket()
+    except Exception as e:
+        return e.__str__()
+    
 
 # =====================================定时任务======================================================
 @app.route(rule='/job/list', methods=['get'])
@@ -161,18 +172,19 @@ def tmdb_scrape_movie():
 
 # ===========================================主程序======================================================
 if __name__ == '__main__':
-    env = Env()
     # 切换环境
+    env = Env()
     env.__switch_to_dev__()
-    # 开启http服务
+    # env.__switch_to_pro__()
 
-    # query_tickets('杭州','武汉')
+    # 加载自定义的swagger文件
+    api_doc(app,config_path=f'openapi/apidoc-{env.curr_env}.yml', url_prefix='/api/doc', title='API doc')
 
     # 添加若干定时任务
-
     # 壁纸刮削
     cron_api.add_job(craw_wallpaper,'cron',hour=13,minute=30,second=0,args=[])
     logging.info('壁纸刮削任务已启动...')
 
     # 启动爬虫主程序
+    logging.info(f'已启动主程序,当前环境:{env.curr_env}')
     app.run(env.listening_host, port=env.port)

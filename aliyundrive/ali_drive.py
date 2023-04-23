@@ -7,7 +7,7 @@ from aligo.request import MoveFileRequest
 from aligo.response import MoveFileResponse
 from aligo.response import MoveFileToTrashResponse
 
-aligo = Aligo(level=logging.INFO,port=8000)
+aligo = Aligo(level=logging.INFO)
 
 def get_file_by_path(path: str = '/', parent_file_id: str = 'root',
                          check_name_mode: CheckNameMode = 'refuse',
