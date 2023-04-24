@@ -126,7 +126,7 @@ def tmm_movie_scrape():
     headers = {
         'api-key': f'{env.tmm_api_key}'
     }
-    max_wait_sec = 30
+    max_wait_sec = 60
     curr_sec = 0
     while(True):
         if curr_sec > max_wait_sec:
