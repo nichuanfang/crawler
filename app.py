@@ -10,6 +10,7 @@ from cron.job.tmm_movie_check import tmm_movie_check
 from my_selenium.my_selenium import logging
 from aliyundrive import ali_drive
 from swagger_ui import api_doc
+import os
 
 app = Flask(__name__)
 # app.debug = True
@@ -171,11 +172,8 @@ def tmdb_scrape_movie():
 
 # ===========================================主程序======================================================
 if __name__ == '__main__':
-    # 切换环境
+    # 加载环境
     env = Env()
-    # env.__switch_to_dev__()
-    env.__switch_to_pro__()
-
     # 加载自定义的swagger文件
     api_doc(app,config_path=f'openapi/apidoc-{env.curr_env}.yml', url_prefix='/api/doc', title='API doc')
 
@@ -185,8 +183,8 @@ if __name__ == '__main__':
     logging.info('壁纸刮削任务已启动...')
 
     # 启动爬虫主程序
-    logging.info(f'已启动主程序,当前环境:{env.curr_env}')
-    app.run(env.listening_host, port=env.port)
+    logging.info(f'===============已启动主程序,当前环境:{env.curr_env}===================================')
+    app.run(env.listening_host, 5000)
 
 
     # TODO Github Actions 将私有仓库 改为公共仓库 好处: a.开源  b.免费使用Github Actions

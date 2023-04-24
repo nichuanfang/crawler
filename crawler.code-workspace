@@ -10,12 +10,11 @@
 		},
 		"python.formatting.provider": "none",
 		"python.terminal.activateEnvInCurrentTerminal": false,
-		"python.defaultInterpreterPath": ""
+		"python.defaultInterpreterPath": "",
+		"yaml.schemas": {}
 	},
 	"launch": {
 		"version": "0.2.0",
-		"configurations": [
-		
-		]
+		"configurations": []
 	}
 }

@@ -124,7 +124,7 @@ def tmm_movie_scrape():
         }
     ]
     headers = {
-        'api-key': 'f2ee4e53-f43a-4169-96a1-fe9c1936e726'
+        'api-key': f'{env.tmm_api_key}'
     }
     max_wait_sec = 30
     curr_sec = 0
