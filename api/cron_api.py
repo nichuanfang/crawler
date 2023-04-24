@@ -22,7 +22,7 @@ def execute_job():
     jobstore = get_not_required('jobstore')
     job = scheduler._lookup_job(job_id, jobstore)
     # 新增一个立即执行的任务
-    if job[0] is not None:
+    if job[0] is not None: 
         scheduler.add_job(job[0].func,'date',run_date=datetime.datetime.now() + datetime.timedelta(seconds=3))
         return '任务已于{}触发!'.format(datetime.datetime.now() + datetime.timedelta(seconds=3))
     return '没有该任务!'
