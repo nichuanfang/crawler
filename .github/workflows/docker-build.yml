@@ -14,9 +14,9 @@ jobs:
         uses: actions/checkout@v3.5.2
         with:
           repository: nichuanfang/docker
+          path: docker
           ref: master
           token: ${{ secrets.GH_TOKEN }}
-          persist-credentials: true
 
       - name: 查看当前目录
         working-directory: ./
