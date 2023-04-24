@@ -15,12 +15,7 @@ jobs:
         with:
           repository: nichuanfang/docker
           ref: master
-          path: ../
 
       - name: 查看当前目录
         working-directory: ./
-        run: ls
-
-      - name: 查看当前目录
-        working-directory: ../
         run: ls
