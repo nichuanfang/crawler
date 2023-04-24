@@ -23,7 +23,7 @@ paths:
   /fk12306/ticket:
     get:
       tags:
-        - "fk12306"
+        - 'fk12306'
       summary: 根据参数查询余票
       description: 查询余票
       parameters:
@@ -31,7 +31,7 @@ paths:
           description: 起始站
           required: true
           # path query header cookie
-          in: query      
+          in: query
           schema:
             # 参数类型
             type: string
@@ -39,7 +39,7 @@ paths:
           description: 终点站
           required: true
           # path query header cookie
-          in: query      
+          in: query
           schema:
             # 参数类型
             type: string
@@ -47,19 +47,18 @@ paths:
           description: 座位
           required: false
           # path query header cookie
-          in: query      
+          in: query
           schema:
             type: string
             enum:
               - 一等座
               - 二等座
-              - 三等座
               - 无座
         - name: train_no
           description: 指定车次号
           required: false
           # path query header cookie
-          in: query      
+          in: query
           schema:
             # 参数类型
             type: string
@@ -67,7 +66,7 @@ paths:
           description: 是否开启高级模式
           required: false
           # path query header cookie
-          in: query      
+          in: query
           schema:
             # 参数类型
             type: boolean
@@ -78,7 +77,7 @@ paths:
           description: 是否开启终极模式
           required: false
           # path query header cookie
-          in: query      
+          in: query
           schema:
             # 参数类型
             type: boolean
@@ -89,7 +88,7 @@ paths:
           description: 是否只看高铁动车
           required: false
           # path query header cookie
-          in: query      
+          in: query
           schema:
             # 参数类型
             type: boolean
@@ -111,7 +110,7 @@ paths:
           description: 是否只看有票
           required: false
           # path query header cookie
-          in: query      
+          in: query
           schema:
             # 参数类型
             type: boolean
@@ -121,7 +120,7 @@ paths:
       responses:
         '200':
           description: OK
-        
+
   /job/list:
     get:
       tags:
@@ -131,14 +130,14 @@ paths:
       responses:
         '200':
           description: OK
-          
+
   /job/execute:
     get:
       tags:
         - 定时任务
       summary: 立即执行任务
       description: 立即执行任务
-      parameters: 
+      parameters:
         - in: query
           name: job_id
           description: 任务id
@@ -152,8 +151,8 @@ paths:
           schema:
             type: string
           required: false
-      responses: 
-        200: 
+      responses:
+        200:
           description: OK
   /job/reschedule:
     get:
@@ -161,18 +160,18 @@ paths:
         - 定时任务
       summary: 重新调度任务
       description: 修改任务,重新调度
-      parameters: 
+      parameters:
         - in: query
           name: job_id
           required: true
           description: 任务id
-          schema: 
+          schema:
             type: string
         - in: query
           name: trigger
           required: true
           description: 触发器
-          schema: 
+          schema:
             type: string
             enum:
               - date
@@ -182,11 +181,11 @@ paths:
           name: jobstore
           required: false
           description: 存储器
-          schema: 
+          schema:
             type: string
-            
-      responses: 
-        200: 
+
+      responses:
+        200:
           description: OK
 
   /job/remove:
@@ -195,21 +194,21 @@ paths:
         - 定时任务
       summary: 移除定时任务
       description: 移除定时任务
-      parameters: 
+      parameters:
         - in: query
           name: job_id
           required: true
           description: 任务id
-          schema: 
+          schema:
             type: string
         - in: query
           name: jobstore
           required: false
           description: 存储器
-          schema: 
+          schema:
             type: string
-      responses: 
-        200: 
+      responses:
+        200:
           description: OK
   /job/pause:
     get:
@@ -217,22 +216,22 @@ paths:
         - 定时任务
       summary: 暂停定时任务
       description: 暂停定时任务
-      parameters: 
+      parameters:
         - in: query
           name: job_id
           required: true
           description: 任务id
-          schema: 
+          schema:
             type: string
         - in: query
           name: jobstore
           required: false
           description: 存储器
-          schema: 
+          schema:
             type: string
-            
-      responses: 
-        200: 
+
+      responses:
+        200:
           description: OK
   /job/resume:
     get:
@@ -240,45 +239,45 @@ paths:
         - 定时任务
       summary: 恢复定时任务
       description: 恢复定时任务
-      parameters: 
+      parameters:
         - in: query
           name: job_id
           required: true
           description: 任务id
-          schema: 
+          schema:
             type: string
         - in: query
           name: jobstore
           required: false
           description: 存储器
-          schema: 
+          schema:
             type: string
-            
-      responses: 
-        200: 
+
+      responses:
+        200:
           description: OK
 
   /ali_drive/rename:
     get:
       tags:
         - 阿里云盘
-      summary: 文件/文件夹重命名 
-      description: 文件/文件夹重命名 
-      parameters: 
+      summary: 文件/文件夹重命名
+      description: 文件/文件夹重命名
+      parameters:
         - in: query
           name: file_id
           required: true
           description: 文件id
-          schema: 
+          schema:
             type: string
         - in: query
           name: new_name
           required: true
           description: 新名字
-          schema: 
+          schema:
             type: string
-      responses: 
-        200: 
+      responses:
+        200:
           description: OK
 
   /tmm/movies:
@@ -287,8 +286,8 @@ paths:
         - tinymediamanager
       summary: tmm电影信息
       description: 获取tmm文件夹下电影信息
-      responses: 
-        200: 
+      responses:
+        200:
           description: OK
 
   /tmm/movie/scrape:
@@ -297,8 +296,8 @@ paths:
         - tinymediamanager
       summary: 刮削已修正名称的tmm文件夹
       description: 刮削已修正电影名字的tmm-movies文件夹
-      responses: 
-        200: 
+      responses:
+        200:
           description: OK
 
   /tmdb/movie:
@@ -307,21 +306,21 @@ paths:
         - tinymediamanager
       summary: 获取电影修正信息
       description: 通过tmdb获取电影修正信息
-      parameters: 
+      parameters:
         - in: query
           name: origin
           required: true
           description: 未修正的电影名称
-          schema: 
+          schema:
             type: string
         - in: query
           name: file_id
           required: true
           description: 文件id
-          schema: 
+          schema:
             type: string
-      responses: 
-        200: 
+      responses:
+        200:
           description: OK
 
   /tmdb/scrape_movie:
@@ -330,19 +329,19 @@ paths:
         - tinymediamanager
       summary: 修正电影文件夹名称
       description: 修正电影文件夹名称
-      parameters: 
+      parameters:
         - in: query
           name: file_id
           required: true
           description: 文件id
-          schema: 
+          schema:
             type: string
         - in: query
           name: name
           required: true
           description: 刮削好的电影名
-          schema: 
+          schema:
             type: string
-      responses: 
-        200: 
+      responses:
+        200:
           description: OK

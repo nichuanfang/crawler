@@ -131,7 +131,13 @@ def tmm_movie_scrape():
     while(True):
         if curr_sec > max_wait_sec:
             return 'tmm启动失败!'
-        res:Response = requests.post(tmm_url,json.dumps(payload),headers=headers)
+        res = Response()
+        try:
+            res:Response = requests.post(tmm_url,json.dumps(payload),headers=headers)
+        except Exception as e:
+            sleep(5)
+            curr_sec+=8
+            continue
         if res.ok:
             # 开启定时任务 
             # 一个小时后执行tmm_movie_check job
