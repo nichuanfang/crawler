@@ -31,7 +31,7 @@ jobs:
           repository: nichuanfang/docker
           path: docker
           ref: master
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }} 
 
       - name: 移动crawler到docker文件夹
         run: mv $GITHUB_WORKSPACE/crawler $GITHUB_WORKSPACE/docker/dockerfile_work/crawler
