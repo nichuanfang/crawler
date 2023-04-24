@@ -13,7 +13,7 @@ jobs:
       - name: 检出nichuanfang/docker
         uses: actions/checkout@v3.5.2
         with:
-          repository: docker
+          repository: nichuanfang/docker
           ref: master
           path: ../
 
