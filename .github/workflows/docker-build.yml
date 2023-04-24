@@ -28,7 +28,7 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
 
       - name: 确认crawler路径
-        run: ls $GITHUB_WORKSPACE/crawler/crawler
+        run: ls $GITHUB_WORKSPACE/crawler
 
       - name: 确认docker路径
-        run: ls $GITHUB_WORKSPACE/crawler/docker
+        run: ls $GITHUB_WORKSPACE/docker
