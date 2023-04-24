@@ -65,7 +65,7 @@ driver = webdriver.Chrome(executable_path=executable_path,chrome_options=options
 # 绕过检测
 with open('/app/crawler/my_selenium/stealth.min.js', 'r') as f:
   js = f.read()
-    # 调用函数在页面加载前执行脚本
+    # 调用函数在页面加载前执行脚本 
 driver.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {'source': js})
 # 隐形等待20秒
 driver.implicitly_wait(20)
