@@ -54,6 +54,7 @@ def tmdb_movie(origin:str,file_id:str):
 
 
 def scrape_tvshows():
+    # TODO 剧集刮削
     pass
 
 if __name__ == '__main__':

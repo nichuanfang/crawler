@@ -107,8 +107,7 @@ def tmm_movie_scrape():
 
     # 执行宿主机命令 启动tinymediamanager
     print(subprocess.call('nsenter -m -u -i -n -p -t 1 sh -c "docker start tinymediamanager"',shell=True))
-    logging.info('已启动tinymediamanager')
-    sleep(10)
+    logging.info('启动tinymediamanager中...')
     # 更新数据源+刮削电影信息
     payload = [
         {
@@ -127,8 +126,17 @@ def tmm_movie_scrape():
     headers = {
         'api-key': 'f2ee4e53-f43a-4169-96a1-fe9c1936e726'
     }
-    res:Response = requests.post(tmm_url,json.dumps(payload),headers=headers)
-    # 开启定时任务 
-    # 一个小时后执行tmm_movie_check job
-    add_job(tmm_movie_check,'date',run_date=datetime.datetime.now() + datetime.timedelta(minutes=60))
-    return res.text
+    max_wait_sec = 30
+    curr_sec = 0
+    while(True):
+        if curr_sec > max_wait_sec:
+            return 'tmm启动失败!'
+        res:Response = requests.post(tmm_url,json.dumps(payload),headers=headers)
+        if res.ok:
+            # 开启定时任务 
+            # 一个小时后执行tmm_movie_check job
+            logging.info('tinymediamanager启动成功!')
+            add_job(tmm_movie_check,'date',run_date=datetime.datetime.now() + datetime.timedelta(minutes=60))
+            return '已发送刮削指令!'
+        sleep(5)
+        curr_sec+=8

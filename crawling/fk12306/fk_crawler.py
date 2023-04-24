@@ -32,8 +32,8 @@ def refresh_cookie() -> tuple[int,str]:
             a = driver.find_element(by=By.ID,value="nc_1_refresh1");# 查找刷新按钮，如果没有说明登录成功，执行except跳出循环
             a.click();# 如果刚刚滑动失败，则点击刷新，重新滑动
         except Exception as e:
-            print(e);
-            break;
+            print(e.__str__())
+            break
     Cookie:str = ''
     expire_time:int = 0
     cookies:list = driver.get_cookies()
@@ -76,4 +76,5 @@ def refresh_cookie() -> tuple[int,str]:
 if __name__ == '__main__':
     # soup = get_soup('https://www.baidu.com')
     # print(soup.prettify())
+    refresh_cookie()
     pass
