@@ -1,0 +1,26 @@
+name: 构建docker镜像
+
+on: push
+
+jobs:
+  job1:
+    name: 构建docker镜像
+    runs-on: ubuntu-20.04
+    steps:
+      - name: 检出项目nichuanfang
+        uses: actions/checkout@v3.5.2
+
+      - name: 检出nichuanfang/docker
+        uses: actions/checkout@v3.5.2
+        with:
+          repository: docker
+          ref: master
+          path: ../
+
+      - name: 查看当前目录
+        working-directory: ./
+        run: ls
+
+      - name: 查看当前目录
+        working-directory: ../
+        run: ls
