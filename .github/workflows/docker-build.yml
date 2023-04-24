@@ -7,16 +7,24 @@ jobs:
     name: 构建docker镜像
     runs-on: ubuntu-20.04
     steps:
-      # - name: 检出项目nichuanfang
-      #   uses: actions/checkout@v3.5.2
+      - name: 检出项目nichuanfang
+        uses: actions/checkout@v3.5.2
+        with:
+          repository: nichuanfang/crawler
+          path: crawler
+          ref: master
+          token: ${{ secrets.GH_TOKEN }}
 
-      # - name: 检出nichuanfang/docker
-      #   uses: actions/checkout@v3.5.2
-      #   with:
-      #     repository: nichuanfang/docker
-      #     path: docker
-      #     ref: master
-      #     token: ${{ secrets.GH_TOKEN }}
+      - name: 检出nichuanfang/docker
+        uses: actions/checkout@v3.5.2
+        with:
+          repository: nichuanfang/docker
+          path: docker
+          ref: master
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: 查看当前目录结构
+        run: ls && pwd
 
       - name: 查看python版本
         run: python -V
