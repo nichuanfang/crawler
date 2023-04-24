@@ -13,9 +13,15 @@ jobs:
       - name: 检出nichuanfang/docker
         uses: actions/checkout@v3.5.2
         with:
-          repository: tiangolo/fastapi
+          repository: nichuanfang/docker
           ref: master
+          token: ${{ github.token }}
+          persist-credentials: true
 
       - name: 查看当前目录
         working-directory: ./
         run: ls
+
+      - name: pwd
+        working-directory: ./
+        run: pwd
