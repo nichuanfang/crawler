@@ -21,38 +21,44 @@ jobs:
         uses: actions/checkout@v3.5.2
         with:
           repository: nichuanfang/crawler
-          path: crawler 
+          path: crawler
           ref: master
           token: ${{ secrets.GH_TOKEN }}
 
       - name: 检出nichuanfang/docker
         uses: actions/checkout@v3.5.2
-        with: 
+        with:
           repository: nichuanfang/docker
           path: docker
           ref: master
           token: ${{ secrets.GH_TOKEN }}
 
-      - name: 构建镜像
-        run: |
-          # 构建镜像
-          docker build -t registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest \
-            --build-arg CRAWLER_ENV=${{ vars.CRAWLER_ENV }} \
-            --build-arg CRAWLER_HOST=${{ vars.CRAWLER_HOST }} \
-            --build-arg TMM_API_KEY=${{ secrets.TMM_API_KEY }} \
-            --build-arg TMM_HOST=${{ vars.TMM_HOST }}  \
-            --build-arg BARK_TOKEN=${{ secrets.BARK_TOKEN }} \
-            $GITHUB_WORKSPACE/docker/dockerfile_work/crawler
-      - name: 推送镜像
-        run: |
-          # 登录阿里云镜像仓库
-          docker login --username=${{ secrets.ALI_DOCKER_USERNAME }} --password=${{ secrets.ALI_DOCKER_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
-          # 推送镜像
-          docker push registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest
-          # 移除本地镜像
-          docker rmi -f registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest
-          # 发送Bark推送
-          curl -L https://api.day.app/${{ secrets.BARK_TOKEN }}/crawler镜像已更新
+      - name: 移动crawler到docker文件夹
+        run: mv $GITHUB_WORKSPACE/crawler $GITHUB_WORKSPACE/docker/dockerfile_work/crawler
+
+      - name: ls
+        run: ls $GITHUB_WORKSPACE/crawler $GITHUB_WORKSPACE/docker/dockerfile_work/crawler
+
+      # - name: 构建镜像
+      #   run: |
+      #     # 构建镜像
+      #     docker build -t registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest \
+      #       --build-arg CRAWLER_ENV=${{ vars.CRAWLER_ENV }} \
+      #       --build-arg CRAWLER_HOST=${{ vars.CRAWLER_HOST }} \
+      #       --build-arg TMM_API_KEY=${{ secrets.TMM_API_KEY }} \
+      #       --build-arg TMM_HOST=${{ vars.TMM_HOST }}  \
+      #       --build-arg BARK_TOKEN=${{ secrets.BARK_TOKEN }} \
+      #       $GITHUB_WORKSPACE/docker/dockerfile_work/crawler
+      # - name: 推送镜像
+      #   run: |
+      #     # 登录阿里云镜像仓库
+      #     docker login --username=${{ secrets.ALI_DOCKER_USERNAME }} --password=${{ secrets.ALI_DOCKER_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
+      #     # 推送镜像
+      #     docker push registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest
+      #     # 移除本地镜像
+      #     docker rmi -f registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest
+      #     # 发送Bark推送
+      #     curl -L https://api.day.app/${{ secrets.BARK_TOKEN }}/crawler镜像已更新
 
       # - name: 服务重启
       #   run: |
