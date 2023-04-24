@@ -1,10 +1,10 @@
 openapi: '3.0.2'
 info:
-  title: API Title
+  title: Crawler Api
   version: '1.0'
 servers:
-  - url: https://crawler.vencenter.cn
-    description: '生产'
+  - url: http://127.0.0.1:5000
+    description: '测试'
 tags:
   - name: fk12306
     description: 12306api
@@ -21,20 +21,327 @@ tags:
 paths:
   /fk12306/ticket:
     get:
-      description: 查询余票
-      summary: 根据参数查询余票
       tags:
         - "fk12306"
+      summary: 根据参数查询余票
+      description: 查询余票
+      parameters:
+        - name: begin
+          description: 起始站
+          required: true
+          # path query header cookie
+          in: query      
+          schema:
+            # 参数类型
+            type: string
+        - name: end
+          description: 终点站
+          required: true
+          # path query header cookie
+          in: query      
+          schema:
+            # 参数类型
+            type: string
+        - name: seats
+          description: 座位
+          required: false
+          # path query header cookie
+          in: query      
+          schema:
+            type: string
+            enum:
+              - 一等座
+              - 二等座
+              - 三等座
+              - 无座
+        - name: train_no
+          description: 指定车次号
+          required: false
+          # path query header cookie
+          in: query      
+          schema:
+            # 参数类型
+            type: string
+        - name: zmode
+          description: 是否开启高级模式
+          required: false
+          # path query header cookie
+          in: query      
+          schema:
+            # 参数类型
+            type: boolean
+            enum:
+              - true
+              - false
+        - name: zzmode
+          description: 是否开启终极模式
+          required: false
+          # path query header cookie
+          in: query      
+          schema:
+            # 参数类型
+            type: boolean
+            enum:
+              - true
+              - false
+        - name: gcd
+          description: 是否只看高铁动车
+          required: false
+          # path query header cookie
+          in: query      
+          schema:
+            # 参数类型
+            type: boolean
+            enum:
+              - true
+              - false
+        - name: ktz
+          description: 是否只看火车
+          required: false
+          # path query header cookie
+          in: query
+          schema:
+            # 参数类型
+            type: boolean
+            enum:
+              - true
+              - false
+        - name: remaining
+          description: 是否只看有票
+          required: false
+          # path query header cookie
+          in: query      
+          schema:
+            # 参数类型
+            type: boolean
+            enum:
+              - true
+              - false
       responses:
         '200':
           description: OK
+        
   /job/list:
     get:
-      description: ''
-      parameters: []
+      tags:
+        - 定时任务
+      summary: '定时任务列表'
+      description: '获取定时任务列表'
       responses:
         '200':
           description: OK
-  
-    
-  
+          
+  /job/execute:
+    get:
+      tags:
+        - 定时任务
+      summary: 立即执行任务
+      description: 立即执行任务
+      parameters: 
+        - in: query
+          name: job_id
+          description: 任务id
+          schema:
+            type: string
+          required: true
+
+        - in: query
+          name: jobstore
+          description: 任务存储
+          schema:
+            type: string
+          required: false
+      responses: 
+        200: 
+          description: OK
+  /job/reschedule:
+    get:
+      tags:
+        - 定时任务
+      summary: 重新调度任务
+      description: 修改任务,重新调度
+      parameters: 
+        - in: query
+          name: job_id
+          required: true
+          description: 任务id
+          schema: 
+            type: string
+        - in: query
+          name: trigger
+          required: true
+          description: 触发器
+          schema: 
+            type: string
+            enum:
+              - date
+              - interval
+              - cron
+        - in: query
+          name: jobstore
+          required: false
+          description: 存储器
+          schema: 
+            type: string
+            
+      responses: 
+        200: 
+          description: OK
+
+  /job/remove:
+    get:
+      tags:
+        - 定时任务
+      summary: 移除定时任务
+      description: 移除定时任务
+      parameters: 
+        - in: query
+          name: job_id
+          required: true
+          description: 任务id
+          schema: 
+            type: string
+        - in: query
+          name: jobstore
+          required: false
+          description: 存储器
+          schema: 
+            type: string
+      responses: 
+        200: 
+          description: OK
+  /job/pause:
+    get:
+      tags:
+        - 定时任务
+      summary: 暂停定时任务
+      description: 暂停定时任务
+      parameters: 
+        - in: query
+          name: job_id
+          required: true
+          description: 任务id
+          schema: 
+            type: string
+        - in: query
+          name: jobstore
+          required: false
+          description: 存储器
+          schema: 
+            type: string
+            
+      responses: 
+        200: 
+          description: OK
+  /job/resume:
+    get:
+      tags:
+        - 定时任务
+      summary: 恢复定时任务
+      description: 恢复定时任务
+      parameters: 
+        - in: query
+          name: job_id
+          required: true
+          description: 任务id
+          schema: 
+            type: string
+        - in: query
+          name: jobstore
+          required: false
+          description: 存储器
+          schema: 
+            type: string
+            
+      responses: 
+        200: 
+          description: OK
+
+  /ali_drive/rename:
+    get:
+      tags:
+        - 阿里云盘
+      summary: 文件/文件夹重命名 
+      description: 文件/文件夹重命名 
+      parameters: 
+        - in: query
+          name: file_id
+          required: true
+          description: 文件id
+          schema: 
+            type: string
+        - in: query
+          name: new_name
+          required: true
+          description: 新名字
+          schema: 
+            type: string
+      responses: 
+        200: 
+          description: OK
+
+  /tmm/movies:
+    get:
+      tags:
+        - tinymediamanager
+      summary: tmm电影信息
+      description: 获取tmm文件夹下电影信息
+      responses: 
+        200: 
+          description: OK
+
+  /tmm/movie/scrape:
+    get:
+      tags:
+        - tinymediamanager
+      summary: 刮削已修正名称的tmm文件夹
+      description: 刮削已修正电影名字的tmm-movies文件夹
+      responses: 
+        200: 
+          description: OK
+
+  /tmdb/movie:
+    get:
+      tags:
+        - tinymediamanager
+      summary: 获取电影修正信息
+      description: 通过tmdb获取电影修正信息
+      parameters: 
+        - in: query
+          name: origin
+          required: true
+          description: 未修正的电影名称
+          schema: 
+            type: string
+        - in: query
+          name: file_id
+          required: true
+          description: 文件id
+          schema: 
+            type: string
+      responses: 
+        200: 
+          description: OK
+
+  /tmdb/scrape_movie:
+    get:
+      tags:
+        - tinymediamanager
+      summary: 修正电影文件夹名称
+      description: 修正电影文件夹名称
+      parameters: 
+        - in: query
+          name: file_id
+          required: true
+          description: 文件id
+          schema: 
+            type: string
+        - in: query
+          name: name
+          required: true
+          description: 刮削好的电影名
+          schema: 
+            type: string
+      responses: 
+        200: 
+          description: OK

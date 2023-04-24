@@ -1,6 +1,5 @@
 #!/usr/local/bin/python
 # coding=utf-8 
-from os import name
 from environment import *
 from flask import Flask
 from api import fk12306_api
@@ -174,8 +173,8 @@ def tmdb_scrape_movie():
 if __name__ == '__main__':
     # 切换环境
     env = Env()
-    env.__switch_to_dev__()
-    # env.__switch_to_pro__()
+    # env.__switch_to_dev__()
+    env.__switch_to_pro__()
 
     # 加载自定义的swagger文件
     api_doc(app,config_path=f'openapi/apidoc-{env.curr_env}.yml', url_prefix='/api/doc', title='API doc')
