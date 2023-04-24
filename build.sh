@@ -18,3 +18,5 @@ echo '本地残留镜像清理完成!'
 echo 'docker-compose up...'
 docker-compose -f /root/docker/docker-compose/docker-compose.yml up -d
 echo 'docker-compose up completed!'
+# 通过Bark发送推送消息
+curl -L https://api.day.app/SxPmVcSCBLLRtuR9EVGt85/crawler已完成部署
