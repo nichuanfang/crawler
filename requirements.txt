@@ -9,4 +9,5 @@ prettytable==3.7.0
 pytz==2023.3
 requests==2.27.1
 selenium==4.9.0
+# 不要手动引入swagger_ui包 否则部署Dockerfile之后会报错!
 swagger_ui_py==22.7.13
