@@ -44,7 +44,6 @@ def refresh_cookie() -> tuple[int,str]:
             if expiry is not None and expiry != '' and expire_time < expiry:
                 expire_time = expiry
     logging.info('=========已获取cookie:{}=========='.format(Cookie[:-1]))
-    driver.close()
     return (expire_time,Cookie[:-1])
 
 # sure = driver.find_element_by_class_name("btn-primary");
