@@ -6,7 +6,7 @@ echo '开始构建镜像...'
 docker build -t registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest /root/docker/dockerfile_work/crawler
 echo '镜像构建完成!'
 # 推送到阿里云镜像仓库
-echo '推送镜像到阿里云镜像仓库...'
+echo '推送镜像到阿里云镜像仓库...' 
 docker push registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest
 echo '推送镜像到阿里云镜像仓库完成!'
 # 删除本地中间镜像
