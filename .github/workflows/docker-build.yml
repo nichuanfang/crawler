@@ -13,7 +13,7 @@ jobs:
       - name: 检出nichuanfang/docker
         uses: actions/checkout@v3.5.2
         with:
-          repository: nichuanfang/docker
+          repository: tiangolo/fastapi
           ref: master
 
       - name: 查看当前目录
