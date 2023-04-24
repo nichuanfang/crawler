@@ -10,46 +10,49 @@ jobs:
       # $GITHUB_WORKSPACE   =  /home/runner/work/crawler/crawler
       # - name: 查看$GITHUB_WORKSPACE
       #   run: echo $GITHUB_WORKSPACE
-      - name: cpu信息
-        run: cat /proc/cpuinfo
 
-      - name: 内存信息
-        run: cat /proc/meminfo
+      # - name: cpu信息  4核心
+      #   run: cat /proc/cpuinfo
 
-      - name: 测试curl
-        run: curl -L https://api.day.app/${{ secrets.BARK_TOKEN }}/测试curl
+      # - name: 内存信息  8g
+      #   run: cat /proc/meminfo
 
-      # - name: 检出项目nichuanfang
-      #   uses: actions/checkout@v3.5.2
-      #   with:
-      #     repository: nichuanfang/crawler
-      #     path: crawler
-      #     ref: master
-      #     token: ${{ secrets.GH_TOKEN }}
+      - name: 检出项目nichuanfang
+        uses: actions/checkout@v3.5.2
+        with:
+          repository: nichuanfang/crawler
+          path: crawler
+          ref: master
+          token: ${{ secrets.GH_TOKEN }}
 
-      # - name: 检出nichuanfang/docker
-      #   uses: actions/checkout@v3.5.2
-      #   with:
-      #     repository: nichuanfang/docker
-      #     path: docker
-      #     ref: master
-      #     token: ${{ secrets.GH_TOKEN }}
+      - name: 检出nichuanfang/docker
+        uses: actions/checkout@v3.5.2
+        with:
+          repository: nichuanfang/docker
+          path: docker
+          ref: master
+          token: ${{ secrets.GH_TOKEN }}
 
-      # - name: 构建镜像
+      - name: 构建镜像
+        run: |
+          # 构建镜像
+          docker build --build-arg \
+          CRAWLER_ENV=${{ vars.CRAWLER_ENV }}  \
+          CRAWLER_HOST=${{ vars.CRAWLER_HOST }} \
+          TMM_API_KEY=${{ secrets.TMM_API_KEY }}  \
+          TMM_HOST=${{ vars.TMM_HOST }} \
+          BARK_TOKEN=${{ secrets.BARK_TOKEN }} \
+          -t registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest $GITHUB_WORKSPACE/docker/dockerfile_work/crawler
+      - name: 推送镜像
+        run: |
+          # 登录阿里云镜像仓库
+          docker login --username=${{ secrets.ALI_DOCKER_USERNAME }} --password=${{ secrets.ALI_DOCKER_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
+          # 推送镜像
+          docker push registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest
+          # 移除本地镜像
+          docker rmi -f registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest
+          # 发送Bark推送
+          curl -L https://api.day.app/${{ secrets.BARK_TOKEN }}/crawler镜像已更新
+
+      # - name: 服务重启
       #   run: |
-      #     # 构建镜像
-      #     docker build --build-arg \
-      #     CRAWLER_ENV=${{ vars.CRAWLER_ENV }}  \
-      #     CRAWLER_HOST=${{ vars.CRAWLER_HOST }} \
-      #     TMM_API_KEY=${{ secrets.TMM_API_KEY }}  \
-      #     TMM_HOST=${{ vars.TMM_HOST }} \
-      #     BARK_TOKEN=${{ secrets.BARK_TOKEN }} \
-      #     -t registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest $GITHUB_WORKSPACE/docker/dockerfile_work/crawler
-      # - name: 推送镜像
-      #   run: |
-      #     # 登录阿里云镜像仓库
-      #     docker login --username=${{ secrets.ALI_DOCKER_USERNAME }} --password=${{ secrets.ALI_DOCKER_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
-      #     # 推送镜像
-      #     docker push registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest
-      #     # 发送Bark推送
-      #     curl -L https://api.day.app/${{ secrets.BARK_TOKEN }}/crawler镜像已更新
