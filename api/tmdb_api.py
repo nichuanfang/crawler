@@ -80,7 +80,7 @@ def tmdb_scrape_movie():
 
 
 def tmm_movie_scrape():
-    # 1. 使用tinymediamanager进行刮削 (tmm需要开启http远程控制)  api_key f2ee4e53-f43a-4169-96a1-fe9c1936e726
+    # 1. 使用tinymediamanager进行刮削 (tmm需要开启http远程控制)  api_key
     # 2. 定期查看tmm文件夹 是否有生成nfo的文件夹 最长检查2h
     # 3. 生成.nfo的文件夹移至movies中 
 
