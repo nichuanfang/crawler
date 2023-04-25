@@ -72,8 +72,6 @@ def move_to_movies(parent_file_id:str,tmm_file_id:str,path_list:list):
                     pass
             final_path+='/'+path
             final_path_dp.append(final_path.replace('movies', 'tmm/tmm-movies'))
-            folder = ali_drive.get_folder_by_path(final_path)
-            if folder is None:
-                ali_drive.aligo.create_folder(final_path)
+            ali_drive.get_folder_by_path(final_path,create_folder=True)
         pass
     

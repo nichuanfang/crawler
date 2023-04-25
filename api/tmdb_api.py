@@ -104,7 +104,6 @@ def tmm_movie_scrape():
     #         <key>: <value>  
     #     }
     # }
-
     # 执行宿主机命令 启动tinymediamanager
     print(subprocess.call('nsenter -m -u -i -n -p -t 1 sh -c "docker start tinymediamanager"',shell=True))
     logging.info('启动tinymediamanager中...')
