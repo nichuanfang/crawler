@@ -35,7 +35,7 @@ jobs:
 
       - name: 移动crawler到docker文件夹
         run: mv $GITHUB_WORKSPACE/crawler $GITHUB_WORKSPACE/docker/dockerfile_work/crawler
-        
+
       - name: 构建镜像
         run: |
           # 构建镜像
@@ -71,12 +71,9 @@ jobs:
           connect_timeout: 10s
           first_ssh: |
             docker rm -f crawler
-            cd /root/docker/docker-compose
-            # 更新镜像
+            cd ~/docker/docker-compose
             docker-compose pull
-            # 启动
             docker-compose up -d
-            # 移除空镜像
             docker rmi -f $(docker images | grep none | awk '{print $3}')
           # scp: |
           #   './test/*' => /home/github/test/
