@@ -74,7 +74,7 @@ jobs:
             cd ~/docker/docker-compose
             docker-compose pull
             docker-compose up -d
-            docker rmi -f $(docker images | grep none | awk '{print $3}')
+            docker image prune -f -a
           # scp: |
           #   './test/*' => /home/github/test/
           #   ./test/test1* => /home/github/test/test1/
