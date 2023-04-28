@@ -5,6 +5,7 @@ from flask import Flask
 from api import fk12306_api
 from api import cron_api
 from api import tmdb_api
+from api import xray_api
 from cron.job.wallpaper_crawling import craw_wallpaper
 from cron.job.tmm_movie_check import tmm_movie_check
 from my_selenium.my_selenium import logging
@@ -34,6 +35,19 @@ def ticket():
     except Exception as e:
         return e.__str__()
     
+#=======================================xray=========================================================
+
+@app.route(rule='/xray/add_rule', methods=['get'])
+def add_rule():
+    """xray添加路由规则
+
+    Returns:
+        _type_: 结果
+    """    
+    try:
+        return xray_api.add_client_route_rule()
+    except Exception as e:
+        return e.__str__()
 
 # =====================================定时任务======================================================
 @app.route(rule='/job/list', methods=['get'])
@@ -167,6 +181,7 @@ def tmdb_scrape_movie():
         return tmdb_api.tmdb_scrape_movie()
     except Exception as e:
         return e.__str__()
+
 
 
 

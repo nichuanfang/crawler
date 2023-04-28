@@ -34,7 +34,7 @@ paths:
           in: query
           schema:
             # 参数类型
-            type: string
+            type: array
         - name: end
           description: 终点站
           required: true
@@ -119,6 +119,56 @@ paths:
               - false
       responses:
         '200':
+          description: OK
+
+  /xray/add_rule:
+    get:
+      tags:
+        - xray
+      summary: 添加路由规则
+      description: 添加路由规则
+      parameters:
+        - in: query
+          name: rules
+          required: true
+          description: 规则集合,多条规则用逗号分隔
+          schema:
+            type: string
+
+        - in: query
+          name: is_subdomain
+          required: true
+          description: 是否为子域名
+          schema:
+            type: string
+            enum:
+              - true
+              - false
+
+        - in: query
+          name: strategy
+          required: true
+          description: 策略
+          schema:
+            type: string
+            enum:
+              - proxy
+              - direct
+              - direct
+
+        - in: query
+          name: position
+          required: true
+          description: 规则位置
+          schema:
+            type: string
+            enum:
+              - body
+              - header
+              - footer
+
+      responses:
+        200:
           description: OK
 
   /job/list:
