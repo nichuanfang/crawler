@@ -50,7 +50,7 @@ paths:
           in: query
           schema:
             # 参数类型
-            type: string
+            type: integer
         - name: seats
           description: 座位
           required: false

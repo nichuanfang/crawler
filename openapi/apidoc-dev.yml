@@ -50,7 +50,7 @@ paths:
           description: 偏移量
           required: false
           # path query header cookie
-          in: query
+          in: integer
           schema:
             # 参数类型
             type: string
