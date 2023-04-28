@@ -43,6 +43,14 @@ paths:
           schema:
             # 参数类型
             type: string
+        - name: offset
+          description: 偏移量
+          required: false
+          # path query header cookie
+          in: query
+          schema:
+            # 参数类型
+            type: string
         - name: seats
           description: 座位
           required: false
