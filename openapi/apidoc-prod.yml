@@ -154,7 +154,7 @@ paths:
             enum:
               - proxy
               - direct
-              - direct
+              - block
 
         - in: query
           name: position
