@@ -37,7 +37,7 @@ paths:
           in: query
           schema:
             # 参数类型
-            type: array
+            type: string
         - name: end
           description: 终点站
           required: true
