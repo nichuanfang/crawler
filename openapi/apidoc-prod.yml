@@ -10,6 +10,9 @@ tags:
   - name: fk12306
     description: 12306api
 
+  - name: xray
+    description: xray配置api
+
   - name: 定时任务
     description: 定时任务api
 
