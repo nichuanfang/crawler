@@ -8,6 +8,7 @@ from api.base_api import get_not_required
 import json
 from flask import request
 import subprocess
+import re
 from my_selenium.my_selenium import logging
 
 
@@ -28,7 +29,13 @@ def add_client_route_rule():
     # 定位 标识该规则放在 header body 还是 footer
     position = get_required('position')
 
-    def format(unhandled_rule):
+    domain_regex = r'^(?=^.{3,255}$)(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+\.\w+)*$'
+
+    def format(unhandled_rule:str):
+        # 判断当前参数是否符合域名规则(正则匹配)
+        match = re.match(domain_regex,unhandled_rule.strip())
+        if match is None:
+            raise RuntimeError(f'规则列表中有非域名规则: {unhandled_rule.strip()}!')
         if is_subdomain:
             # 当前域名和所有的子域名 可以自定义规则
             return unhandled_rule.strip()
@@ -106,6 +113,8 @@ def add_client_route_rule():
                 json.dump(footer,w_footer_file)
         case _:
             pass
+    if len(handled_rules) == 0:
+        return f'无需更新路由规则!'    
     user_name = 'github-actions[bot]'
     email = 'github-actions[bot]@users.noreply.github.com'
     # 指定用户和邮箱  git config user.name git config user.email
