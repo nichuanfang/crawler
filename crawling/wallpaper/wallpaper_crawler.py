@@ -55,7 +55,9 @@ def craw_random_wallpaper():
     # 获取图片链接并保存
     figures = soup.findAll('figure')
     # 随机获取一个figure
-    figure = figures[random.randint(1, len(figures))]
+    if len(figures) == 0:
+        return craw_random_wallpaper()
+    figure = figures[random.randint(0, len(figures))]
     # 解析对应的url 
     link_soup = get_soup(figure.contents[1]['href'])
     img_ele = link_soup.find(id='wallpaper')

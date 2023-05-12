@@ -2,6 +2,7 @@
 # coding=utf-8 
 from environment import *
 from flask import Flask
+from flask import render_template
 from api import fk12306_api
 from api import cron_api
 from api import tmdb_api
@@ -13,6 +14,7 @@ from my_selenium.my_selenium import logging
 from aliyundrive import ali_drive
 from swagger_ui import api_doc
 import os
+import base64
 
 app = Flask(__name__)
 # app.debug = True
@@ -54,12 +56,22 @@ def add_rule():
 
 @app.route(rule='/wallpaper/random',methods=['get'])
 def wallpaper_random():
-    """随机获取一张图片 字节流
+    """随机获取一张图片 base64字节流
 
     Returns:
         _type_: _description_
     """    
-    return random_wallpaper()
+    return base64.b64encode(random_wallpaper()).decode()
+
+@app.route(rule='/wallpaper/random/view',methods=['get'])
+def wallpaper_random_view():
+    """随机获取一张图片 html展示
+
+    Returns:
+        _type_: _description_
+    """    
+    base64_data = base64.b64encode(random_wallpaper()).decode()
+    return render_template('index.html',img_stream=base64_data)
 
 # =====================================定时任务======================================================
 @app.route(rule='/job/list', methods=['get'])

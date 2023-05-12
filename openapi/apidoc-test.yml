@@ -195,6 +195,16 @@ paths:
         '200':
           description: OK
 
+  /wallpaper/random/view:
+    get:
+      tags:
+        - image
+      summary: '随机获取一张图片预览'
+      description: '随机获取一张图片(html)'
+      responses:
+        '200':
+          description: OK
+
   /job/list:
     get:
       tags:
