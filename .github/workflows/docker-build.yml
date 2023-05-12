@@ -60,6 +60,7 @@ jobs:
 
       - name: 启动服务
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+        continue-on-error: true
         env:
           WELCOME: 'ssh scp ssh pipelines'
           LASTSSH: 'Doing something after copying'
@@ -72,9 +73,9 @@ jobs:
           first_ssh: |
             docker rm -f crawler
             cd ~/docker/docker-compose
-            docker-compose pull
+            docker rm -f crawler
+            docker rmi -f registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest
             docker-compose up -d
-            docker image prune -f -a
           # scp: |
           #   './test/*' => /home/github/test/
           #   ./test/test1* => /home/github/test/test1/

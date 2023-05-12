@@ -47,6 +47,27 @@ def craw_wallpaper():
     print(subprocess.call('nsenter -m -u -i -n -p -t 1 sh -c "docker restart nginx"',shell=True))
     logging.info('已重启nginx')
 
+def craw_random_wallpaper():
+    # 随机挑一页数据(总数200)
+    soup = get_soup(f'https://wallhaven.cc/search?categories=110&purity=100&atleast=1280x720&sorting=date_added&order=desc&ai_art_filter=1&page={random.randint(1, 200)}')
+
+    #拖动到页面最底部，=0为拖动到页面最顶部  分多少页就滚动几次
+    # 获取图片链接并保存
+    figures = soup.findAll('figure')
+    # 随机获取一个figure
+    figure = figures[random.randint(1, 24)]
+    # 解析对应的url 
+    link_soup = get_soup(figure.contents[1]['href'])
+    img_ele = link_soup.find(id='wallpaper')
+    if img_ele is None:
+        # 直到有数据
+        return craw_random_wallpaper()
+    else:
+        url = img_ele['src']
+        r = requests.get(url)
+        logging.info(f'已刮削图片:{url}')
+        return r.content
+
 if __name__ == '__main__':
     craw_wallpaper()
     pass

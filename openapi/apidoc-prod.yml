@@ -13,6 +13,9 @@ tags:
   - name: xray
     description: xray配置api
 
+  - name: image
+    description: 图片服务
+
   - name: 定时任务
     description: 定时任务api
 
@@ -180,6 +183,16 @@ paths:
 
       responses:
         200:
+          description: OK
+
+  /wallpaper/random:
+    get:
+      tags:
+        - image
+      summary: '随机获取一张图片'
+      description: '随机获取一张图片(字节流)'
+      responses:
+        '200':
           description: OK
 
   /job/list:

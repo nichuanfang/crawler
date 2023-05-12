@@ -7,6 +7,7 @@ from api import cron_api
 from api import tmdb_api
 from api import xray_api
 from cron.job.wallpaper_crawling import craw_wallpaper
+from cron.job.wallpaper_crawling import random_wallpaper
 from cron.job.tmm_movie_check import tmm_movie_check
 from my_selenium.my_selenium import logging
 from aliyundrive import ali_drive
@@ -48,6 +49,17 @@ def add_rule():
         return xray_api.add_client_route_rule()
     except Exception as e:
         return e.__str__()
+
+#=======================================图片=========================================================
+
+@app.route(rule='/wallpaper/random',methods=['get'])
+def wallpaper_random():
+    """随机获取一张图片 字节流
+
+    Returns:
+        _type_: _description_
+    """    
+    return random_wallpaper()
 
 # =====================================定时任务======================================================
 @app.route(rule='/job/list', methods=['get'])
