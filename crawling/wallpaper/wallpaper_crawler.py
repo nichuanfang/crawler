@@ -49,7 +49,7 @@ def craw_wallpaper():
 
 def craw_random_wallpaper():
     # 随机挑一页数据(总数200)
-    soup = get_soup(f'https://wallhaven.cc/search?categories=110&purity=100&atleast=1280x720&sorting=date_added&order=desc&ai_art_filter=1&page={random.randint(1, 200)}')
+    soup = get_soup(f'https://wallhaven.cc/search?categories=110&purity=100&atleast=1200x900&sorting=date_added&order=desc&ai_art_filter=1&page={random.randint(1, 200)}')
 
     #拖动到页面最底部，=0为拖动到页面最顶部  分多少页就滚动几次
     # 获取图片链接并保存
