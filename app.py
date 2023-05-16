@@ -214,7 +214,7 @@ if __name__ == '__main__':
     # 加载环境
     env = Env()
     # 加载自定义的swagger文件
-    api_doc(app,config_path=f'openapi/apidoc-{env.curr_env}.yml', url_prefix='/api/doc', title='API doc')
+    api_doc(app,config_path=f'/code/crawler/openapi/apidoc-{env.curr_env}.yml', url_prefix='/api/doc', title='API doc')
 
     # 添加若干定时任务
     # 壁纸刮削
