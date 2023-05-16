@@ -10,10 +10,10 @@ import subprocess
 from environment import BARK_TOKEN
 
 
-def notice_qrlink(qrlink:str):
-    subprocess.call(f'curl -L https://api.day.app/{BARK_TOKEN}/Aligo登录/{qrlink}',shell=True)
+# def notice_qrlink(qrlink:str):
+#     subprocess.call(f'curl -L https://api.day.app/{BARK_TOKEN}/Aligo登录/{qrlink}',shell=True)
 
-aligo = Aligo(show=notice_qrlink,level=logging.INFO)
+aligo = Aligo(level=logging.INFO)
 
 def get_file_by_path(path: str = '/', parent_file_id: str = 'root',
                          check_name_mode: CheckNameMode = 'refuse',
