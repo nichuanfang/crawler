@@ -142,7 +142,7 @@ def add_client_route_rule():
     pass
 
     
-    
+    handled_rules = []
     if len(handled_rules) == 0:
         return f'无需更新路由规则!'
     user_name = 'github-actions[bot]'
