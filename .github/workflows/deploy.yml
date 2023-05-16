@@ -1,4 +1,4 @@
-name: 构建docker镜像
+name: deploy
 
 on: push
 
