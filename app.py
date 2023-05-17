@@ -218,7 +218,7 @@ if __name__ == '__main__':
 
     # 添加若干定时任务
     # 壁纸刮削
-    cron_api.add_job(craw_wallpaper,'cron',hour=13,minute=30,second=0,args=[])
+    cron_api.add_job(craw_wallpaper,'cron',hour=13,minute=30,second=0,args=[]) 
     logging.info('壁纸刮削任务已启动...')
 
     # 启动爬虫主程序
