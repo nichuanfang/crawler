@@ -5,6 +5,7 @@ import sys
 sys.path.append('../../')
 from my_selenium.my_selenium import driver,BeautifulSoup,ActionChains,By,logging
 from my_selenium.my_selenium import get_soup
+import environment
 
 
 def refresh_cookie() -> tuple[int,str]:
@@ -12,10 +13,10 @@ def refresh_cookie() -> tuple[int,str]:
     driver.get("https://kyfw.12306.cn/otn/resources/login.html")
     user = driver.find_element(by=By.ID,value="J-userName")
     user.click()
-    user.send_keys("rw15356123161")
+    user.send_keys(f"{environment.J_USERNAME}")
     pswd = driver.find_element(by=By.ID,value="J-password")
     pswd.click()
-    pswd.send_keys("0820nCf9270")
+    pswd.send_keys(f"{environment.J_PASSWORD}")
     butten = driver.find_element(by=By.ID,value="J-login")
     butten.click()
     time.sleep(1)

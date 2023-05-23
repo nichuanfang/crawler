@@ -11,7 +11,6 @@ from flask import request
 import subprocess
 import re
 from my_selenium.my_selenium import logging
-
 # 判断该站点是域名
 domain_regex = r'^(?=^.{3,255}$)(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+\.\w+)*$'
 

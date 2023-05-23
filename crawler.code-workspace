@@ -11,7 +11,9 @@
 		"python.formatting.provider": "none",
 		"python.terminal.activateEnvInCurrentTerminal": false,
 		"python.defaultInterpreterPath": "",
-		"yaml.schemas": {}
+		"yaml.schemas": {
+			"https://json.schemastore.org/github-workflow.json": "file:///e%3A/workspace/crawler/.github/workflows/deploy.yml"
+		}
 	},
 	"launch": {
 		"version": "0.2.0",

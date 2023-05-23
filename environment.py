@@ -34,7 +34,10 @@ TMM_API_KEY = get_environ('TMM_API_KEY','')
 TMM_HOST = get_environ('TMM_HOST','www.vencenter.cn')
 # IOS推送APP Bark的token     模板: https://api.day.app/{BARK_TOKEN}/{content}
 BARK_TOKEN = get_environ('BARK_TOKEN','')
-
+# fk12306用户名
+J_USERNAME = get_environ('J_USERNAME','')
+# fk12306密码
+J_PASSWORD = get_environ('J_PASSWORD','')
 
 # 单例类
 class Singleton(type):

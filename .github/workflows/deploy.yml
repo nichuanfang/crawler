@@ -7,43 +7,6 @@ jobs:
     name: 部署
     runs-on: ubuntu-20.04
     steps:
-      # $GITHUB_WORKSPACE   =  /home/runner/work/crawler/crawler
-      # - name: 查看$GITHUB_WORKSPACE
-      #   run: echo $GITHUB_WORKSPACE
-
-      # - name: cpu信息  4核心
-      #   run: cat /proc/cpuinfo
-
-      # - name: 内存信息  8g
-      #   run: cat /proc/meminfo
-
-      # - name: 检出项目nichuanfang
-      #   uses: actions/checkout@v3.5.2
-      #   with:
-      #     repository: nichuanfang/crawler
-      #     path: crawler
-      #     ref: master
-      #     token: ${{ secrets.GH_TOKEN }}
-
-      # - name: 检出nichuanfang/docker
-      #   uses: actions/checkout@v3.5.2
-      #   with:
-      #     repository: nichuanfang/docker
-      #     path: docker
-      #     ref: master
-      #     token: ${{ secrets.GH_TOKEN }}
-
-      # - name: 推送镜像
-      #   run: |
-      #     # 登录阿里云镜像仓库
-      #     docker login --username=${{ secrets.ALI_DOCKER_USERNAME }} --password=${{ secrets.ALI_DOCKER_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
-      #     # 推送镜像
-      #     docker push registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest
-      #     # 移除本地镜像
-      #     docker rmi -f registry.cn-hangzhou.aliyuncs.com/jayzhou/crawler:latest
-      #     # 发送Bark推送
-      #     curl -L https://api.day.app/${{ secrets.BARK_TOKEN }}/crawler镜像已更新
-
       - name: 启动服务
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
         continue-on-error: true
@@ -63,9 +26,6 @@ jobs:
             cd ~/code/docker/docker-compose
             docker rm -f crawler
             docker-compose up -d
-          # scp: |
-          #   './test/*' => /home/github/test/
-          #   ./test/test1* => /home/github/test/test1/
-          #   ./test/test*.csv => "/home/github/test/test2/"
+
           last_ssh: |
             curl -L https://api.day.app/${{ secrets.BARK_TOKEN }}/crawler服务已启动

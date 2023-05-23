@@ -16,24 +16,6 @@ jobs:
     name: 构建docker镜像
     runs-on: ubuntu-20.04
     steps:
-      # $GITHUB_WORKSPACE   =  /home/runner/work/crawler/crawler
-      # - name: 查看$GITHUB_WORKSPACE
-      #   run: echo $GITHUB_WORKSPACE
-
-      # - name: cpu信息  4核心
-      #   run: cat /proc/cpuinfo
-
-      # - name: 内存信息  8g
-      #   run: cat /proc/meminfo
-
-      # - name: 检出项目nichuanfang
-      #   uses: actions/checkout@v3.5.2
-      #   with:
-      #     repository: nichuanfang/crawler
-      #     path: crawler
-      #     ref: master
-      #     token: ${{ secrets.GH_TOKEN }}
-
       - name: 检出nichuanfang/docker
         uses: actions/checkout@v3.5.2
         with:
@@ -41,9 +23,6 @@ jobs:
           path: docker
           ref: master
           token: ${{ secrets.GH_TOKEN }}
-
-      # - name: 移动crawler到docker文件夹
-      #   run: mv $GITHUB_WORKSPACE/crawler $GITHUB_WORKSPACE/docker/dockerfile_work/crawler
 
       - name: 构建镜像
         run: |
@@ -54,6 +33,8 @@ jobs:
             --build-arg TMM_API_KEY=${{ secrets.TMM_API_KEY }} \
             --build-arg TMM_HOST=${{ vars.TMM_HOST }}  \
             --build-arg BARK_TOKEN=${{ secrets.BARK_TOKEN }} \
+            --build-arg J_USERNAME=${{ secrets.J_USERNAME }} \
+            --build-arg J_PASSWORD=${{ secrets.J_PASSWORD }} \
             $GITHUB_WORKSPACE/docker/dockerfile_work/crawler
 
       - name: 推送镜像

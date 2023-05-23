@@ -257,7 +257,7 @@ class TrainTable:
         try:
             # 发送请求
             r = s.get(
-                "https://kyfw.12306.cn/otn/leftTicket/queryZ", params=params, timeout=10
+                "https://kyfw.12306.cn/otn/leftTicket/query", params=params, timeout=10
             )
             j = r.json()
             raws = j["data"]["result"]
