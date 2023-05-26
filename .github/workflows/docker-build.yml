@@ -50,7 +50,7 @@ jobs:
 
       - name: 更新服务器镜像
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
-        continue-on-error: false
+        continue-on-error: true
         env:
           WELCOME: 'ssh scp ssh pipelines'
           LASTSSH: 'Doing something after copying'
